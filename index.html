@@ -75,4 +75,105 @@
             y: canvas.height / 2,
             width: 80, // Largura da imagem do pássaro
             height: 80, // Altura da imagem do pássaro
-            gravity
+            gravity: 0.2,  // Gravidade ajustada para cair mais devagar
+            lift: -6,      // Força de subida ajustada para um movimento mais suave
+            velocity: 0
+        };
+
+        const columns = [];
+        const columnWidth = 60;
+        const gapHeight = 250;
+        let score = 0;
+        let gameOver = false;
+
+        function drawBird() {
+            ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
+        }
+
+        function drawColumn(column) {
+            ctx.drawImage(columnImage, column.x, 0, columnWidth, column.gapY);
+            ctx.drawImage(columnImage, column.x, column.gapY + gapHeight, columnWidth, canvas.height - column.gapY - gapHeight);
+        }
+
+        function updateColumns() {
+            for (let i = columns.length - 1; i >= 0; i--) {
+                const column = columns[i];
+                column.x -= 5;
+                if (column.x + columnWidth < 0) {
+                    columns.splice(i, 1);
+                    score++;
+                }
+                drawColumn(column);
+                if (
+                    bird.x + bird.width > column.x &&
+                    bird.x < column.x + columnWidth &&
+                    (bird.y < column.gapY || bird.y + bird.height > column.gapY + gapHeight)
+                ) {
+                    gameOver = true;
+                }
+            }
+
+            if (columns.length === 0 || columns[columns.length - 1].x < canvas.width - 300) {
+                const gapY = Math.random() * (canvas.height - gapHeight - 100) + 50;
+                columns.push({ x: canvas.width, gapY });
+            }
+        }
+
+        function updateBird() {
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+
+            if (bird.y + bird.height > canvas.height || bird.y < 0) {
+                gameOver = true;
+            }
+        }
+
+        function restartGame() {
+            bird.y = canvas.height / 2;
+            bird.velocity = 0;
+            columns.length = 0;
+            score = 0;
+            gameOver = false;
+            document.getElementById('gameOverText').style.display = 'none';
+            document.getElementById('tryAgainButton').style.display = 'none';
+            animate(); // Reinicia o loop de animação
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            updateBird();
+            drawBird();
+            updateColumns();
+
+            ctx.fillStyle = 'white';
+            ctx.font = '24px Arial';
+            ctx.fillText('Score: ' + score, 10, 30);
+
+            if (!gameOver) {
+                requestAnimationFrame(animate);
+            } else {
+                document.getElementById('gameOverText').style.display = 'block';
+                document.getElementById('tryAgainButton').style.display = 'block';
+            }
+        }
+
+        // Substituindo o evento de teclado por evento de toque na tela
+        window.addEventListener('touchstart', function () {
+            bird.velocity = bird.lift;
+        });
+
+        // Garantir que todas as imagens estão carregadas antes de iniciar o jogo
+        let imagesLoaded = 0;
+        function checkIfReadyToStart() {
+            imagesLoaded++;
+            if (imagesLoaded === 2) {
+                // Ambas as imagens (pássaro e coluna) foram carregadas
+                restartGame();
+            }
+        }
+
+        birdImage.onload = checkIfReadyToStart;
+        columnImage.onload = checkIfReadyToStart;
+    </script>
+</body>
+</html>
