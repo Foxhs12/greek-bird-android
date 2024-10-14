@@ -75,8 +75,8 @@
             y: canvas.height / 2,
             width: 80, // Largura da imagem do pássaro
             height: 80, // Altura da imagem do pássaro
-            gravity: 0.2,  // Gravidade ajustada para cair mais devagar
-            lift: -6,      // Força de subida ajustada para um movimento mais suave
+            gravity: 0.15,  // Gravidade ainda mais suave
+            lift: -5,       // Subida ajustada para combinar com a gravidade
             velocity: 0
         };
 
@@ -98,7 +98,7 @@
         function updateColumns() {
             for (let i = columns.length - 1; i >= 0; i--) {
                 const column = columns[i];
-                column.x -= 5;
+                column.x -= 3; // Reduzi para 3, movendo as colunas mais lentamente
                 if (column.x + columnWidth < 0) {
                     columns.splice(i, 1);
                     score++;
