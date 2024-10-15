@@ -267,6 +267,7 @@
                 }
                 restartGame(); // Reinicia o jogo ao clicar após Game Over
             } else {
+                // Apenas aplica a gravidade quando o jogo começou
                 bird.velocity = bird.lift;
             }
         });
