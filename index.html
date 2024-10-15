@@ -203,21 +203,25 @@
         async function handleGameOver() {
             document.getElementById('gameOverText').style.display = 'block';
 
-            const canSave = await canSaveScore(score);
-            if (canSave) {
-                const playerName = prompt("Digite seu nome para o ranking:");
-                if (playerName) {
+            const playerName = prompt("Digite seu nome para o ranking:");
+            let rankingText = "";
+            let scoreSaved = false; // Para verificar se a pontuação foi salva
+
+            if (playerName) {
+                const canSave = await canSaveScore(score);
+                if (canSave) {
                     await saveScore(playerName, score);
+                    scoreSaved = true; // A pontuação foi salva
                 }
             }
 
             const topScores = await getTopScores();
-            let rankingText = "Top 10 Scores:\n";
+            rankingText += "Top 10 Scores:\n";
             topScores.forEach((entry, index) => {
                 rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
             });
 
-            if (!canSave) {
+            if (!scoreSaved) {
                 rankingText += "Sua pontuação não foi alta o suficiente para entrar no ranking.\n";
             }
 
