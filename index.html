@@ -155,6 +155,7 @@
         let gameOver = false;
         let gameStarted = false; // Controla se o jogo já começou
         let isPaused = false; // Variável para controlar a pausa do jogo
+        let rankingDisplayed = false; // Variável para controlar se o ranking foi exibido
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -208,6 +209,7 @@
             score = 0;
             gameOver = false;
             isPaused = false; // Reinicia a variável de pausa
+            rankingDisplayed = false; // Reinicia a variável de ranking
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('tryAgainButton').style.display = 'none';
             document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
@@ -246,11 +248,13 @@
                             rankingText += `Sua pontuação (${score}) não entrou no ranking.`;
                             document.getElementById('rankingText').innerText = rankingText;
                             document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
+                            rankingDisplayed = true; // Marca que o ranking foi exibido
                         });
                     }
                 } else {
                     document.getElementById('rankingText').innerText = "Sua pontuação não foi suficiente para entrar no ranking.";
                     document.getElementById('rankingText').style.display = 'block'; // Mostra a mensagem de pontuação
+                    rankingDisplayed = true; // Marca que o ranking foi exibido
                 }
             }
         }
@@ -260,6 +264,10 @@
                 gameStarted = true; // O jogo começa no primeiro toque
                 restartGame(); // Inicia o jogo
             } else if (gameOver) {
+                // Se o jogo acabou, esconde o ranking ao clicar
+                if (rankingDisplayed) {
+                    document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
+                }
                 restartGame(); // Reinicia o jogo ao clicar após Game Over
             } else {
                 bird.velocity = bird.lift;
