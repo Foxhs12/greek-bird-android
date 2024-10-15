@@ -135,7 +135,7 @@
             width: 80,
             height: 80,
             gravity: 0.15,
-            lift: -5,
+            lift: -4, // Ajuste para subir mais rapidamente
             velocity: 0
         };
 
@@ -145,7 +145,6 @@
         let score = 0;
         let gameOver = false;
         let gameStarted = false;
-        let rankingDisplayed = false;
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -162,8 +161,9 @@
         function updateColumns() {
             for (let i = columns.length - 1; i >= 0; i--) {
                 const column = columns[i];
-                column.x -= 3;
+                column.x -= 3; // Velocidade das colunas
 
+                // Remover colunas que saem da tela
                 if (column.x + columnWidth < 0) {
                     columns.splice(i, 1);
                     score++;
@@ -171,6 +171,7 @@
 
                 drawColumn(column);
 
+                // Verificação de colisão
                 if (
                     bird.x + bird.width > column.x &&
                     bird.x < column.x + columnWidth &&
@@ -180,6 +181,7 @@
                 }
             }
 
+            // Adiciona novas colunas
             if (columns.length === 0 || columns[columns.length - 1].x < canvas.width - 300) {
                 const gapY = Math.random() * (canvas.height - gapHeight - 100) + 50;
                 columns.push({ x: canvas.width, gapY });
@@ -190,6 +192,7 @@
             bird.velocity += bird.gravity;
             bird.y += bird.velocity;
 
+            // Verificação de limites do jogo
             if (bird.y + bird.height > canvas.height || bird.y < 0) {
                 gameOver = true;
             }
@@ -201,9 +204,8 @@
             columns.length = 0;
             score = 0;
             gameOver = false;
-            rankingDisplayed = false;
             document.getElementById('gameOverText').style.display = 'none';
-            document.getElementById('rankingText').style.display = 'none';
+            document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
             animate();
         }
 
@@ -222,10 +224,12 @@
             } else {
                 document.getElementById('gameOverText').style.display = 'block';
 
+                // Obter as melhores pontuações e verificar se a pontuação do jogador é suficiente
                 getTopScores().then(topScores => {
                     let lowestScore = topScores.length > 0 ? topScores[topScores.length - 1].score : 0;
 
                     if (score > lowestScore) {
+                        // Solicitar o nome do jogador
                         const playerName = prompt("Digite seu nome para o ranking:");
                         if (playerName) {
                             saveScore(playerName, score);
@@ -237,24 +241,24 @@
                         rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
                     });
 
+                    // Adiciona a pontuação do jogador ao ranking
                     rankingText += `\nSua pontuação: ${score} ${topScores.length < 10 || topScores.some(entry => entry.score < score) ? "entrou" : "não entrou"} no ranking.`;
 
                     document.getElementById('rankingText').innerText = rankingText;
-                    document.getElementById('rankingText').style.display = 'block';
-                    rankingDisplayed = true;
+                    document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
                 });
             }
         }
 
-        canvas.addEventListener('click', async (event) => {
+        canvas.addEventListener('click', async () => {
             if (!gameStarted) {
                 gameStarted = true; // O jogo começa no primeiro toque
                 restartGame(); // Inicia o jogo
             } else if (gameOver) {
-                restartGame(); // Reinicia o jogo ao clicar se já estiver finalizado
+                restartGame(); // Reinicia o jogo após Game Over
             } else {
                 // Faz o pássaro "subir" ao clicar
-                bird.velocity = bird.lift; // Ajuste para aplicar a força de subida diretamente
+                bird.velocity = bird.lift; // Define a velocidade de subida de forma mais responsiva
             }
         });
     </script>
