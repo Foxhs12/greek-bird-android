@@ -22,36 +22,36 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Função para salvar a pontuação e o nome do jogador no Firestore
+        const scoreMapping = {
+            player: 'Player',
+            score: 'Score'
+        };
+
+
         window.saveScore = async function saveScore(playerName, score) {
             try {
-                const collectionScore = collection(db, "score") 
+                const collectionScore = collection(db, "score");
                 await addDoc(collectionScore, {
-                    Player: playerName,
-                    Score: score
+                    [scoreMapping.player]: playerName,
+                    [scoreMapping.score]: score
                 });
             } catch (error) {
                 console.error("Erro ao salvar a pontuação: ", error);
             }
-        }
+        };
 
-        if (gameOver) {
-
-        }
-
-        // Função para obter os 5 maiores placares e nomes
         window.getTopScores = async function getTopScores() {
             const topScores = [];
-            try { 
-                const collectionScore = collection(db, "score")
+            try {
+                const collectionScore = collection(db, "score");
                 const snapshot = await getDocs(
-                    query(collectionScore, orderBy("Score", "desc"), limit(5))
+                    query(collectionScore, orderBy(scoreMapping.score, "desc"), limit(5))
                 );
-                console.log(snapshot)
+
                 snapshot.forEach((doc) => {
                     topScores.push({
-                        name: doc.data().name || "Anônimo",  // Caso o nome não exista, usar "Anônimo"
-                        score: doc.data().score
+                        name: doc.data()[scoreMapping.player] || "Anônimo",
+                        score: doc.data()[scoreMapping.score]
                     });
                 });
 
@@ -60,7 +60,8 @@
                 console.error("Erro ao obter as pontuações: ", error);
                 return [];
             }
-        }
+        };
+
 
 
     </script>
