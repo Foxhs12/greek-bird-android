@@ -2,10 +2,7 @@
 <html lang="en">
 
 <head>
-    <!-- Adicione este script no <head> do seu arquivo HTML -->
-
     <script type="module">
-        // Configuração do Firebase
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
         import { getFirestore, collection, addDoc, getDocs, orderBy, limit, query } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
 
@@ -45,7 +42,7 @@
                 );
                 snapshot.forEach((doc) => {
                     topScores.push({
-                        name: doc.data().Player || "Anônimo",  // Caso o nome não exista, usar "Anônimo"
+                        name: doc.data().Player || "Anônimo",
                         score: doc.data().Score
                     });
                 });
@@ -55,6 +52,18 @@
                 console.error("Erro ao obter as pontuações: ", error);
                 return [];
             }
+        }
+
+        // Função para verificar se a nova pontuação pode ser salva
+        window.canSaveScore = async function canSaveScore(newScore) {
+            const topScores = await getTopScores();
+            // Se não houver scores, pode salvar
+            if (topScores.length < 10) {
+                return true;
+            }
+            // Obtem o menor score do top 10
+            const lowestScore = topScores[topScores.length - 1].score;
+            return newScore > lowestScore;
         }
     </script>
     <meta charset="UTF-8">
@@ -119,7 +128,7 @@
     <div id="gameOverText">Game Over</div>
     <button id="tryAgainButton" onclick="restartGame()">Try Again</button>
 
-    <script> 
+    <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -198,7 +207,12 @@
             // Solicitar o nome do jogador e salvar a pontuação
             const playerName = prompt("Digite seu nome para o ranking:");
             if (playerName) {
-                await saveScore(playerName, score);
+                const canSave = await canSaveScore(score);
+                if (canSave) {
+                    await saveScore(playerName, score);
+                } else {
+                    alert("Sua pontuação não é alta o suficiente para entrar no ranking.");
+                }
             }
             
             // Obter e exibir o ranking antes de mostrar o botão de reiniciar
