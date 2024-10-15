@@ -39,7 +39,7 @@
 
         }
 
-        // Função para obter os 5 maiores placares e nomes
+        // Função para obter os 10 maiores placares e nomes
         window.getTopScores = async function getTopScores() {
             const topScores = [];
             try { 
@@ -233,16 +233,16 @@
                 document.getElementById('tryAgainButton').style.display = 'block';
 
                 // Solicitar o nome do jogador
-                const playerName = prompt("Digite seu nome para o ranking:");
+                const playerName = prompt("Digite seu nome no ranking:");
 
                 if (playerName) {
                     // Salvar a pontuação do jogador com o nome
                     saveScore(playerName, score);
 
-                    // Recuperar e exibir os 5 maiores placares com nomes
+                    // Recuperar e exibir os 10 maiores placares com nomes
                     getTopScores().then(topScores => {
-                        let rankingText = "Top 5 Scores:\n";
-                        topScores.forEach((entry, index) => {
+                        let rankingText = "Top 10 Scores:\n";
+                        topScores.forEach((entry, index) => 10 {
                             rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
                         });
                         alert(rankingText);
