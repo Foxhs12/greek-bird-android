@@ -114,7 +114,7 @@
             top: 55%; /* Ajustado para ficar abaixo do Game Over */
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 20px; /* Reduzido para uma fonte menor */
+            font-size: 16px; /* Reduzido para uma fonte menor */
             color: white;
             display: none;
             z-index: 2;
@@ -126,6 +126,7 @@
             white-space: pre-wrap; /* Para manter a formatação do texto */
             max-width: 90%; /* Limita a largura da caixa */
             text-align: center; /* Centraliza o texto dentro da caixa */
+            pointer-events: none; /* Impede interação com a caixa */
         }
     </style>
 </head>
@@ -253,7 +254,7 @@
 
             ctx.fillStyle = 'white';
             ctx.font = '24px Arial';
-            ctx.fillText('Score: ' + score, 10, 30);
+            ctx.fillText(`Score: ${score}`, 10, 30);
 
             if (gameOver) {
                 handleGameOver();
