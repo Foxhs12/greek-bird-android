@@ -35,25 +35,7 @@
         }
 
         if (gameOver) {
-            document.getElementById('gameOverText').style.display = 'block';
-            document.getElementById('tryAgainButton').style.display = 'block';
 
-            // Solicitar o nome do jogador
-            const playerName = prompt("Digite seu nome para o ranking:");
-
-            if (playerName) {
-                // Salvar a pontuação do jogador com o nome
-                saveScore(playerName, score);
-
-                // Recuperar e exibir os 5 maiores placares com nomes
-                getTopScores().then(topScores => {
-                    let rankingText = "Top 5 Scores:\n";
-                    topScores.forEach((entry, index) => {
-                        rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
-                    });
-                    alert(rankingText);
-                });
-            }
         }
 
         // Função para obter os 5 maiores placares e nomes
@@ -78,6 +60,9 @@
                 return [];
             }
         }
+        window.savescore = saveScore;
+        window.getTopScores = getTopScores;
+        
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -239,6 +224,23 @@
             } else {
                 document.getElementById('gameOverText').style.display = 'block';
                 document.getElementById('tryAgainButton').style.display = 'block';
+
+                // Solicitar o nome do jogador
+                const playerName = prompt("Digite seu nome para o ranking:");
+
+                if (playerName) {
+                    // Salvar a pontuação do jogador com o nome
+                    saveScore(playerName, score);
+
+                    // Recuperar e exibir os 5 maiores placares com nomes
+                    getTopScores().then(topScores => {
+                        let rankingText = "Top 5 Scores:\n";
+                        topScores.forEach((entry, index) => {
+                            rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
+                        });
+                        alert(rankingText);
+                    });
+                }
             }
         }
 
