@@ -163,6 +163,7 @@
         const gapHeight = 250;
         let score = 0;
         let gameOver = false;
+        let gameStarted = false; // Nova variável para controlar o estado do jogo
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -259,9 +260,12 @@
             }
         }
 
-        window.addEventListener('click', function () {
-            if (gameOver) {
+        canvas.addEventListener('click', async (event) => {
+            if (!gameStarted) {
+                gameStarted = true; // O jogo começa no primeiro toque
                 restartGame();
+            } else if (gameOver) {
+                restartGame(); // Reinicia o jogo ao clicar após Game Over
             } else {
                 bird.velocity = bird.lift;
             }
@@ -279,7 +283,7 @@
         function checkIfReadyToStart() {
             imagesLoaded++;
             if (imagesLoaded === 2) {
-                restartGame();
+                // Iniciar o jogo no primeiro clique
             }
         }
 
