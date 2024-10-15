@@ -44,7 +44,6 @@
                         score: doc.data().Score
                     });
                 });
-
                 return topScores;
             } catch (error) {
                 console.error("Erro ao obter as pontuações: ", error);
@@ -86,7 +85,7 @@
 
         #gameOverText {
             position: absolute;
-            top: 40%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 48px;
@@ -97,7 +96,7 @@
 
         #tryAgainButton {
             position: absolute;
-            top: 50%;
+            top: 60%;
             left: 50%;
             transform: translate(-50%, -50%);
             padding: 10px 20px;
@@ -108,7 +107,7 @@
 
         #rankingText {
             position: absolute;
-            top: 60%;
+            top: 70%;
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(255, 255, 255, 0.8);
@@ -116,8 +115,6 @@
             padding: 10px;
             display: none; /* Começa invisível */
             z-index: 2;
-            max-width: 300px; /* Limita a largura da caixa */
-            text-align: center; /* Centraliza o texto */
         }
     </style>
 </head>
@@ -136,9 +133,9 @@
         canvas.height = window.innerHeight;
 
         const birdImage = new Image();
-        birdImage.src = 'socrates.png'; // Adicione o caminho correto da imagem
+        birdImage.src = 'socrates.png';
         const columnImage = new Image();
-        columnImage.src = 'column.jpeg'; // Adicione o caminho correto da imagem
+        columnImage.src = 'column.jpeg';
 
         const bird = {
             x: 50,
@@ -147,8 +144,7 @@
             height: 80,
             gravity: 0.15,
             lift: -5,
-            velocity: 0,
-            isFlying: false
+            velocity: 0
         };
 
         const columns = [];
@@ -156,7 +152,8 @@
         const gapHeight = 250;
         let score = 0;
         let gameOver = false;
-        let gameStarted = false;
+        let gameStarted = false; // Controla se o jogo já começou
+        let rankingDisplayed = false; // Variável para controlar se o ranking foi exibido
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -174,7 +171,6 @@
             for (let i = columns.length - 1; i >= 0; i--) {
                 const column = columns[i];
                 column.x -= 3;
-
                 if (column.x + columnWidth < 0) {
                     columns.splice(i, 1);
                     score++;
@@ -196,23 +192,21 @@
         }
 
         function updateBird() {
-            if (bird.isFlying) {
-                bird.velocity += bird.gravity;
-                bird.y += bird.velocity;
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
 
-                if (bird.y + bird.height > canvas.height || bird.y < 0) {
-                    gameOver = true;
-                }
+            if (bird.y + bird.height > canvas.height || bird.y < 0) {
+                gameOver = true;
             }
         }
 
         function restartGame() {
-            bird.y = canvas.height / 2; // Resetar para a altura inicial
-            bird.velocity = 0; // Resetar velocidade
-            bird.isFlying = false; // O pássaro começa parado
+            bird.y = canvas.height / 2;
+            bird.velocity = 0;
             columns.length = 0;
             score = 0;
             gameOver = false;
+            rankingDisplayed = false; // Reinicia a variável de ranking
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('tryAgainButton').style.display = 'none';
             document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
@@ -235,48 +229,47 @@
                 document.getElementById('gameOverText').style.display = 'block';
                 document.getElementById('tryAgainButton').style.display = 'block';
 
-                // Solicitar o nome do jogador se a pontuação for suficiente
-                if (score >= 10) {
-                    const playerName = prompt("Digite seu nome para o ranking:");
-                    if (playerName) {
-                        saveScore(playerName, score);
-                        getTopScores().then(topScores => {
-                            let rankingText = "Top 10 Scores:\n";
-                            topScores.forEach((entry, index) => {
-                                rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
-                            });
-                            document.getElementById('rankingText').innerText = rankingText;
-                            document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
-                        });
+                // Obter as melhores pontuações e verificar se a pontuação do jogador é suficiente
+                getTopScores().then(topScores => {
+                    let lowestScore = topScores.length > 0 ? topScores[topScores.length - 1].score : 0;
+
+                    if (score > lowestScore) {
+                        // Solicitar o nome do jogador
+                        const playerName = prompt("Digite seu nome para o ranking:");
+                        if (playerName) {
+                            saveScore(playerName, score);
+                        }
                     }
-                } else {
-                    document.getElementById('rankingText').innerText = "Sua pontuação não foi suficiente para entrar no ranking.";
-                    document.getElementById('rankingText').style.display = 'block'; // Mostra a mensagem
-                }
+
+                    let rankingText = "Top 10 Scores:\n";
+                    topScores.forEach((entry, index) => {
+                        rankingText += ${index + 1}. ${entry.name}: ${entry.score}\n;
+                    });
+
+                    // Adiciona a pontuação do jogador ao ranking
+                    rankingText += \nSua pontuação: ${score} ${topScores.length < 10 || topScores.some(entry => entry.score < score) ? "entrou" : "não entrou"} no ranking.;
+                    
+                    document.getElementById('rankingText').innerText = rankingText;
+                    document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
+                    rankingDisplayed = true; // Marca que o ranking foi exibido
+                });
             }
         }
 
-        canvas.addEventListener('click', () => {
+        canvas.addEventListener('click', async (event) => {
             if (!gameStarted) {
-                gameStarted = true; // O jogo começa apenas no primeiro toque
-                bird.isFlying = true; // O pássaro começa a voar no primeiro toque
-            } else {
-                if (gameOver) {
-                    restartGame(); // Reinicia o jogo se já estiver em game over
-                } else {
-                    bird.isFlying = true; // O pássaro começa a voar
+                gameStarted = true; // O jogo começa no primeiro toque
+                restartGame(); // Inicia o jogo
+            } else if (gameOver) {
+                // Se o jogo acabou e o ranking foi exibido, ao clicar, esconde o ranking
+                if (rankingDisplayed) {
+                    document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
                 }
-            }
-
-            // Alterna a exibição do ranking
-            const rankingTextElement = document.getElementById('rankingText');
-            if (rankingTextElement.style.display === 'block') {
-                rankingTextElement.style.display = 'none';
+                restartGame(); // Reinicia o jogo ao clicar após Game Over
             } else {
-                rankingTextElement.style.display = 'block';
+                bird.velocity = bird.lift;
             }
         });
-
     </script>
 </body>
 
