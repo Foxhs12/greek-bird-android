@@ -230,27 +230,22 @@
                 document.getElementById('tryAgainButton').style.display = 'block';
 
                 // Solicitar o nome do jogador se a pontuação for suficiente
-                if (score >= 10) { // Define um limite de pontuação para solicitar o nome
-                    const playerName = prompt("Digite seu nome para o ranking:");
-                    if (playerName) {
-                        saveScore(playerName, score);
-                        getTopScores().then(topScores => {
-                            let rankingText = "Top 10 Scores:\n";
-                            topScores.forEach((entry, index) => {
-                                rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
-                            });
-                            // Adiciona uma mensagem informando se a pontuação entrou no ranking
-                            rankingText += `\nSua pontuação (${score}) ${topScores.length < 10 || topScores.some(entry => entry.score < score) ? "entrou" : "não entrou"} no ranking.`;
-                            document.getElementById('rankingText').innerText = rankingText;
-                            document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
-                            rankingDisplayed = true; // Marca que o ranking foi exibido
-                        });
-                    }
-                } else {
-                    document.getElementById('rankingText').innerText = "Sua pontuação não foi suficiente para entrar no ranking.";
-                    document.getElementById('rankingText').style.display = 'block'; // Mostra a mensagem de pontuação
-                    rankingDisplayed = true; // Marca que o ranking foi exibido
+                const playerName = prompt("Digite seu nome para o ranking:");
+                if (playerName) {
+                    saveScore(playerName, score);
                 }
+
+                getTopScores().then(topScores => {
+                    let rankingText = "Top 10 Scores:\n";
+                    topScores.forEach((entry, index) => {
+                        rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
+                    });
+                    
+                    rankingText += `\nSua pontuação: ${score} ${topScores.length < 10 || topScores.some(entry => entry.score < score) ? "entrou" : "não entrou"} no ranking.`;
+                    document.getElementById('rankingText').innerText = rankingText;
+                    document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
+                    rankingDisplayed = true; // Marca que o ranking foi exibido
+                });
             }
         }
 
