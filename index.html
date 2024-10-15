@@ -25,7 +25,7 @@
         // Função para salvar a pontuação e o nome do jogador no Firestore
         window.saveScore = async function saveScore(playerName, score) {
             try {
-                const collectionScore = collection(db, "score")
+                const collectionScore = collection(db, "score") 
                 await addDoc(collectionScore, {
                     Player: playerName,
                     Score: score
@@ -39,15 +39,16 @@
 
         }
 
+        // Função para obter os 5 maiores placares e nomes
         // Função para obter os 10 maiores placares e nomes
         window.getTopScores = async function getTopScores() {
             const topScores = [];
-            try {
+            try { 
                 const collectionScore = collection(db, "score")
                 const snapshot = await getDocs(
                     query(collectionScore, orderBy("Score", "desc"), limit(10))
                 );
-                snapshot.forEach((doc) => console.log(doc.data()))
+                snapshot.forEach((doc)=> console.log(doc.data()))
                 snapshot.forEach((doc) => {
                     topScores.push({
                         name: doc.data().Player || "Anônimo",  // Caso o nome não exista, usar "Anônimo"
@@ -161,15 +162,15 @@
         }
 
         function drawColumn(column) {
-            // Desenha a coluna inferior normalmente
-            ctx.drawImage(columnImage, column.x, column.gapY + gapHeight, columnWidth, canvas.height - column.gapY - gapHeight);
+    // Desenha a coluna inferior normalmente
+    ctx.drawImage(columnImage, column.x, column.gapY + gapHeight, columnWidth, canvas.height - column.gapY - gapHeight);
 
-            // Desenha a coluna superior, mas invertida
-            ctx.save(); // Salva o estado atual do contexto
-            ctx.scale(1, -1); // Inverte o eixo Y
-            ctx.drawImage(columnImage, column.x, -column.gapY, columnWidth, column.gapY); // Desenha a coluna invertida
-            ctx.restore(); // Restaura o estado anterior do contexto
-        }
+    // Desenha a coluna superior, mas invertida
+    ctx.save(); // Salva o estado atual do contexto
+    ctx.scale(1, -1); // Inverte o eixo Y
+    ctx.drawImage(columnImage, column.x, -column.gapY, columnWidth, column.gapY); // Desenha a coluna invertida
+    ctx.restore(); // Restaura o estado anterior do contexto
+}
 
 
         function updateColumns() {
@@ -199,15 +200,13 @@
         function updateBird() {
             bird.velocity += bird.gravity;
             bird.y += bird.velocity;
+
             if (bird.y + bird.height > canvas.height || bird.y < 0) {
                 gameOver = true;
-                console.log("Game Over: o pássaro caiu");
             }
         }
 
-
         function restartGame() {
-            console.log("Reiniciando o jogo...");
             bird.y = canvas.height / 2;
             bird.velocity = 0;
             columns.length = 0;
@@ -217,7 +216,6 @@
             document.getElementById('tryAgainButton').style.display = 'none';
             animate(); // Reinicia o loop de animação
         }
-
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -236,22 +234,26 @@
                 document.getElementById('tryAgainButton').style.display = 'block';
 
                 // Solicitar o nome do jogador
+                const playerName = prompt("Digite seu nome para o ranking:");
                 const playerName = prompt("Digite seu nome no ranking:");
 
                 if (playerName) {
                     // Salvar a pontuação do jogador com o nome
                     saveScore(playerName, score);
 
+                    // Recuperar e exibir os 5 maiores placares com nomes
                     // Recuperar e exibir os 10 maiores placares com nomes
                     getTopScores().then(topScores => {
+                        let rankingText = "Top 5 Scores:\n";
+                        topScores.forEach((entry, index) => {
                         let rankingText = "Top 10 Scores:\n";
                         topScores.forEach((entry, index) => 10 {
                             rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
+                        });
+                        alert(rankingText);
                     });
-                    alert(rankingText);
-                });
+                }
             }
-        }
         }
 
         // Substituindo o evento de teclado por evento de toque na tela
