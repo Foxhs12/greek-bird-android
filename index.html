@@ -154,7 +154,6 @@
         let score = 0;
         let gameOver = false;
         let gameStarted = false; // Controla se o jogo já começou
-        let isPaused = false; // Variável para controlar a pausa do jogo
         let rankingDisplayed = false; // Variável para controlar se o ranking foi exibido
 
         function drawBird() {
@@ -208,7 +207,6 @@
             columns.length = 0;
             score = 0;
             gameOver = false;
-            isPaused = false; // Reinicia a variável de pausa
             rankingDisplayed = false; // Reinicia a variável de ranking
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('tryAgainButton').style.display = 'none';
@@ -218,11 +216,9 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (!isPaused) { // Verifica se o jogo não está pausado
-                updateBird();
-                drawBird();
-                updateColumns();
-            }
+            updateBird();
+            drawBird();
+            updateColumns();
 
             ctx.fillStyle = 'white';
             ctx.font = '24px Arial';
@@ -231,7 +227,6 @@
             if (!gameOver) {
                 requestAnimationFrame(animate);
             } else {
-                isPaused = true; // Pausa o jogo
                 document.getElementById('gameOverText').style.display = 'block';
                 document.getElementById('tryAgainButton').style.display = 'block';
 
@@ -264,7 +259,7 @@
                 gameStarted = true; // O jogo começa no primeiro toque
                 restartGame(); // Inicia o jogo
             } else if (gameOver) {
-                // Se o jogo acabou, esconde o ranking ao clicar
+                // Se o jogo acabou e o ranking foi exibido, ao clicar, esconde o ranking
                 if (rankingDisplayed) {
                     document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
                 }
