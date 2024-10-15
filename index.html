@@ -229,13 +229,18 @@
                 document.getElementById('gameOverText').style.display = 'block';
                 document.getElementById('tryAgainButton').style.display = 'block';
 
-                // Solicitar o nome do jogador
-                const playerName = prompt("Digite seu nome para o ranking:");
-                if (playerName) {
-                    saveScore(playerName, score);
-                }
-
+                // Obter as melhores pontuações e verificar se a pontuação do jogador é suficiente
                 getTopScores().then(topScores => {
+                    let lowestScore = topScores.length > 0 ? topScores[topScores.length - 1].score : 0;
+
+                    if (score > lowestScore) {
+                        // Solicitar o nome do jogador
+                        const playerName = prompt("Digite seu nome para o ranking:");
+                        if (playerName) {
+                            saveScore(playerName, score);
+                        }
+                    }
+
                     let rankingText = "Top 10 Scores:\n";
                     topScores.forEach((entry, index) => {
                         rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
