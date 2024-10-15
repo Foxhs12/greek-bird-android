@@ -42,9 +42,10 @@
         // Função para obter os 5 maiores placares e nomes
         window.getTopScores = async function getTopScores() {
             const topScores = [];
-            try {
+            try { 
+                const collectionScore = collection(db, "scores")
                 const snapshot = await getDocs(
-                    query(collection(db, "scores"), orderBy("Score", "desc"), limit(5))
+                    query(collectionScore, orderBy("Score", "desc"), limit(5))
                 );
                 snapshot.forEach((doc) => {
                     topScores.push({
