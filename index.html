@@ -62,7 +62,7 @@
     <div id="gameOverText">Game Over</div>
     <button id="tryAgainButton" onclick="restartGame()">Try Again</button>
 
-    <script>
+    <script> //Mecanica de Jogo
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -180,38 +180,33 @@
         columnImage.onload = checkIfReadyToStart;
     </script>
 
-    <script>
-    const firebaseConfig = {
-    apiKey: "AIzaSyDlaMVBRQlulpV9MbVxasuGblF38KkY5f8",
-    authDomain: "greek-bird.firebaseapp.com",
-    projectId: "greek-bird",
-    storageBucket: "greek-bird.appspot.com",
-    messagingSenderId: "58870766246",
-    appId: "1:58870766246:web:6eb9c796ec11abd0e5f267",
-    measurementId: "G-PZBLWMH5W6"
-  };
-  </script>
+    <script> //Configuração do Database
+      const firebaseConfig = {
+        apiKey: "AIzaSyDlaMVBRQlulpV9MbVxasuGblF38KkY5f8",
+        authDomain: "greek-bird.firebaseapp.com",
+        projectId: "greek-bird",
+        storageBucket: "greek-bird.appspot.com",
+        messagingSenderId: "58870766246",
+        appId: "1:58870766246:web:6eb9c796ec11abd0e5f267",
+        measurementId: "G-PZBLWMH5W6"
+      };
 
-  <script>
-  firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-</script>
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-<script>
-// Função para salvar a pontuação e o nome do jogador no Firestore
-async function saveScore(playerName, score) {
+    // Função para salvar a pontuação e o nome do jogador no Firestore
+    async function saveScore(playerName, score) {
     try {
         await db.collection("scores").add({
-            name: playerName,
-            score: score,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            Player: playerName,
+            Score: score
         });
     } catch (error) {
         console.error("Erro ao salvar a pontuação: ", error);
     }
 }
 
-if (gameOver) {
+  if (gameOver) {
     document.getElementById('gameOverText').style.display = 'block';
     document.getElementById('tryAgainButton').style.display = 'block';
 
