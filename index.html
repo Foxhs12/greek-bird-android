@@ -237,8 +237,8 @@
                     // Salvar a pontuação do jogador com o nome
                     saveScore(playerName, score);
 
-                    // Recuperar e exibir os 10 maiores placares com nomes
-                    getTopScores().then(topScores => 10 {  
+                 // Recuperar e exibir os 10 maiores placares com nomes
+                    getTopScores().then(topScores => 10 { 
                         let rankingText = "Top 10 Scores:\n";
                         topScores.forEach((entry, index) => {
                             rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
@@ -248,6 +248,7 @@
                 }
             }
         }
+
 
         // Substituindo o evento de teclado por evento de toque na tela
         window.addEventListener('touchstart', function () {
