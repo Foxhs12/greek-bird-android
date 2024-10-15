@@ -154,6 +154,7 @@
         let score = 0;
         let gameOver = false;
         let gameStarted = false; // Controla se o jogo já começou
+        let isPaused = false; // Variável para controlar a pausa do jogo
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -206,6 +207,7 @@
             columns.length = 0;
             score = 0;
             gameOver = false;
+            isPaused = false; // Reinicia a variável de pausa
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('tryAgainButton').style.display = 'none';
             document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
@@ -214,9 +216,11 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            updateBird();
-            drawBird();
-            updateColumns();
+            if (!isPaused) { // Verifica se o jogo não está pausado
+                updateBird();
+                drawBird();
+                updateColumns();
+            }
 
             ctx.fillStyle = 'white';
             ctx.font = '24px Arial';
@@ -225,6 +229,7 @@
             if (!gameOver) {
                 requestAnimationFrame(animate);
             } else {
+                isPaused = true; // Pausa o jogo
                 document.getElementById('gameOverText').style.display = 'block';
                 document.getElementById('tryAgainButton').style.display = 'block';
 
