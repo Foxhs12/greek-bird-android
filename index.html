@@ -90,10 +90,10 @@
             transform: translate(-50%, -50%);
             font-size: 48px;
             color: white;
-            font-family: 'Papyrus', sans-serif; /* Estilo de fonte grega */
             display: none;
             z-index: 2;
         }
+
         #tryAgainButton {
             position: absolute;
             top: 60%;
@@ -103,7 +103,6 @@
             font-size: 24px;
             display: none;
             z-index: 2;
-            text-align: center; /* Centraliza o texto */
         }
 
         #rankingText {
@@ -268,9 +267,7 @@
                 }
                 restartGame(); // Reinicia o jogo ao clicar após Game Over
             } else {
-                // Apenas aplica a gravidade quando o jogo começou
                 bird.velocity = bird.lift;
-                bird.velocity += bird.lift;
             }
         });
     </script>
