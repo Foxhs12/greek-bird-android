@@ -161,9 +161,16 @@
         }
 
         function drawColumn(column) {
-            ctx.drawImage(columnImage, column.x, 0, columnWidth, column.gapY);
-            ctx.drawImage(columnImage, column.x, column.gapY + gapHeight, columnWidth, canvas.height - column.gapY - gapHeight);
-        }
+    // Desenha a coluna inferior normalmente
+    ctx.drawImage(columnImage, column.x, column.gapY + gapHeight, columnWidth, canvas.height - column.gapY - gapHeight);
+
+    // Desenha a coluna superior, mas invertida
+    ctx.save(); // Salva o estado atual do contexto
+    ctx.scale(1, -1); // Inverte o eixo Y
+    ctx.drawImage(columnImage, column.x, -column.gapY, columnWidth, column.gapY); // Desenha a coluna invertida
+    ctx.restore(); // Restaura o estado anterior do contexto
+}
+
 
         function updateColumns() {
             for (let i = columns.length - 1; i >= 0; i--) {
