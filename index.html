@@ -55,6 +55,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greek Bird</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gloock:wght@400&display=swap');
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -90,7 +92,7 @@
             transform: translate(-50%, -50%);
             font-size: 48px;
             color: white;
-            font-family: 'Papyrus', sans-serif; /* Estilo de fonte grega */
+            font-family: 'Gloock', serif; /* Fonte alterada para Gloock */
             display: none;
             z-index: 2;
             text-align: center; /* Centraliza o texto */
@@ -132,8 +134,8 @@
             y: canvas.height / 2,
             width: 80,
             height: 80,
-            gravity: 0.15,
-            lift: -5,
+            gravity: 0.25, // Aumentando a gravidade para uma queda mais realista
+            lift: -7, // Ajustando a força de subida
             velocity: 0
         };
 
@@ -160,12 +162,17 @@
         function updateColumns() {
             for (let i = columns.length - 1; i >= 0; i--) {
                 const column = columns[i];
-                column.x -= 3;
+                column.x -= 3; // Velocidade das colunas
+
+                // Remover colunas que saem da tela
                 if (column.x + columnWidth < 0) {
                     columns.splice(i, 1);
                     score++;
                 }
+
                 drawColumn(column);
+
+                // Verificação de colisão
                 if (
                     bird.x + bird.width > column.x &&
                     bird.x < column.x + columnWidth &&
@@ -175,6 +182,7 @@
                 }
             }
 
+            // Adiciona novas colunas
             if (columns.length === 0 || columns[columns.length - 1].x < canvas.width - 300) {
                 const gapY = Math.random() * (canvas.height - gapHeight - 100) + 50;
                 columns.push({ x: canvas.width, gapY });
@@ -185,6 +193,7 @@
             bird.velocity += bird.gravity;
             bird.y += bird.velocity;
 
+            // Verificação de limites do jogo
             if (bird.y + bird.height > canvas.height || bird.y < 0) {
                 gameOver = true;
             }
@@ -249,11 +258,10 @@
                 gameStarted = true; // O jogo começa no primeiro toque
                 restartGame(); // Inicia o jogo
             } else if (gameOver) {
-                // Se o jogo acabou e o ranking foi exibido, ao clicar, esconde o ranking
-                if (rankingDisplayed) {
-                    document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
-                }
+                // Reinicia o jogo ao clicar
+                restartGame();
             } else {
+                // Faz o pássaro "subir" ao clicar
                 bird.velocity += bird.lift;
             }
         });
