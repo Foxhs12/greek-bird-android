@@ -23,7 +23,7 @@
         const db = getFirestore(app);
 
         // Função para salvar a pontuação e o nome do jogador no Firestore
-        async function saveScore(playerName, score) {
+        window.saveScore = async function saveScore(playerName, score) {
             try {
                 await db.collection("scores").add({
                     Player: playerName,
@@ -39,7 +39,7 @@
         }
 
         // Função para obter os 5 maiores placares e nomes
-        async function getTopScores() {
+        window.getTopScores = async function getTopScores() {
             const topScores = [];
             try {
                 const snapshot = await db.collection("scores")
@@ -60,9 +60,8 @@
                 return [];
             }
         }
-        window.savescore = saveScore;
-        window.getTopScores = getTopScores;
-        
+
+
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
