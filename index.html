@@ -25,7 +25,8 @@
         // Função para salvar a pontuação e o nome do jogador no Firestore
         window.saveScore = async function saveScore(playerName, score) {
             try {
-                await addDoc(collection(db, "scores"), {
+                const collectionScore = collection(db, "scores") 
+                await addDoc(collectionScore, {
                     Player: playerName,
                     Score: score
                 });
