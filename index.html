@@ -97,10 +97,22 @@
 
         #gameOverText {
             position: absolute;
-            top: 50%;
+            top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 64px;
+            color: white;
+            display: none;
+            z-index: 2;
+            text-align: center;
+        }
+
+        #rankingText {
+            position: absolute;
+            top: 50%; /* Ajustado para ficar abaixo do Game Over */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
             color: white;
             display: none;
             z-index: 2;
@@ -113,6 +125,7 @@
     <div id="background"></div>
     <canvas id="gameCanvas"></canvas>
     <div id="gameOverText">Game Over</div>
+    <div id="rankingText"></div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -189,21 +202,31 @@
 
         async function handleGameOver() {
             document.getElementById('gameOverText').style.display = 'block';
+
             const playerName = prompt("Digite seu nome para o ranking:");
+            let rankingText = "";
+            let scoreSaved = false; // Para verificar se a pontuação foi salva
+
             if (playerName) {
                 const canSave = await canSaveScore(score);
                 if (canSave) {
                     await saveScore(playerName, score);
-                } else {
-                    alert("Sua pontuação não é alta o suficiente para entrar no ranking.");
+                    scoreSaved = true; // A pontuação foi salva
                 }
             }
+
             const topScores = await getTopScores();
-            let rankingText = "Top 10 Scores:\n";
+            rankingText += "Top 10 Scores:\n";
             topScores.forEach((entry, index) => {
                 rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
             });
-            alert(rankingText);
+
+            if (!scoreSaved) {
+                rankingText += "Sua pontuação não foi alta o suficiente para entrar no ranking.\n";
+            }
+
+            document.getElementById('rankingText').innerText = rankingText;
+            document.getElementById('rankingText').style.display = 'block';
         }
 
         function restartGame() {
@@ -213,6 +236,7 @@
             score = 0;
             gameOver = false;
             document.getElementById('gameOverText').style.display = 'none';
+            document.getElementById('rankingText').style.display = 'none';
             animate();
         }
 
@@ -237,12 +261,11 @@
             bird.velocity = bird.lift;
         });
 
-        // Adicionando evento de clique em qualquer lugar da tela para reiniciar o jogo
         window.addEventListener('click', function () {
             if (gameOver) {
                 restartGame();
             } else {
-                bird.velocity = bird.lift; // Fazer o pássaro subir se não estiver em Game Over
+                bird.velocity = bird.lift;
             }
         });
 
