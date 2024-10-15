@@ -205,12 +205,13 @@
 
             const playerName = prompt("Digite seu nome para o ranking:");
             let rankingText = "";
+            let scoreSaved = false; // Para verificar se a pontuação foi salva
+
             if (playerName) {
                 const canSave = await canSaveScore(score);
                 if (canSave) {
                     await saveScore(playerName, score);
-                } else {
-                    rankingText += "Sua pontuação não foi alta o suficiente para entrar no ranking.\n";
+                    scoreSaved = true; // A pontuação foi salva
                 }
             }
 
@@ -219,6 +220,10 @@
             topScores.forEach((entry, index) => {
                 rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
             });
+
+            if (!scoreSaved) {
+                rankingText += "Sua pontuação não foi alta o suficiente para entrar no ranking.\n";
+            }
 
             document.getElementById('rankingText').innerText = rankingText;
             document.getElementById('rankingText').style.display = 'block';
