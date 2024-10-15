@@ -25,7 +25,7 @@
         // Função para salvar a pontuação e o nome do jogador no Firestore
         window.saveScore = async function saveScore(playerName, score) {
             try {
-                const collectionScore = collection(db, "score")
+                const collectionScore = collection(db, "score");
                 await addDoc(collectionScore, {
                     Player: playerName,
                     Score: score
@@ -35,17 +35,14 @@
             }
         }
 
-        if (gameOver)
-
-        // Função para obter os 5 maiores placares e nomes
+        // Função para obter os 10 maiores placares e nomes
         window.getTopScores = async function getTopScores() {
             const topScores = [];
             try {
-                const collectionScore = collection(db, "score")
+                const collectionScore = collection(db, "score");
                 const snapshot = await getDocs(
                     query(collectionScore, orderBy("Score", "desc"), limit(10))
                 );
-                snapshot.forEach((doc) => console.log(doc.data()))
                 snapshot.forEach((doc) => {
                     topScores.push({
                         name: doc.data().Player || "Anônimo",  // Caso o nome não exista, usar "Anônimo"
@@ -59,8 +56,6 @@
                 return [];
             }
         }
-
-
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,7 +75,6 @@
             width: 100%;
             height: 100%;
             background-image: url('background.jpeg');
-            /* Certifique-se de que o nome e a extensão estão corretos */
             background-size: cover;
             background-position: center;
             z-index: 0;
@@ -89,7 +83,6 @@
         canvas {
             display: block;
             background-color: transparent;
-            /* Mantendo o fundo do canvas transparente */
             position: absolute;
             top: 0;
             left: 0;
@@ -126,25 +119,25 @@
     <div id="gameOverText">Game Over</div>
     <button id="tryAgainButton" onclick="restartGame()">Try Again</button>
 
-    <script> //Mecanica de Jogo
+    <script> 
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
         const birdImage = new Image();
-        birdImage.src = 'socrates.png'; // Caminho para a imagem do pássaro
+        birdImage.src = 'socrates.png';
 
         const columnImage = new Image();
-        columnImage.src = 'column.jpeg'; // Caminho para a imagem da coluna
+        columnImage.src = 'column.jpeg';
 
         const bird = {
             x: 50,
             y: canvas.height / 2,
-            width: 80, // Largura da imagem do pássaro
-            height: 80, // Altura da imagem do pássaro
-            gravity: 0.15,  // Gravidade ainda mais suave
-            lift: -5,       // Subida ajustada para combinar com a gravidade
+            width: 80,
+            height: 80,
+            gravity: 0.15,
+            lift: -5,
             velocity: 0
         };
 
@@ -159,21 +152,17 @@
         }
 
         function drawColumn(column) {
-            // Desenha a coluna inferior normalmente
             ctx.drawImage(columnImage, column.x, column.gapY + gapHeight, columnWidth, canvas.height - column.gapY - gapHeight);
-
-            // Desenha a coluna superior, mas invertida
-            ctx.save(); // Salva o estado atual do contexto
-            ctx.scale(1, -1); // Inverte o eixo Y
-            ctx.drawImage(columnImage, column.x, -column.gapY, columnWidth, column.gapY); // Desenha a coluna invertida
-            ctx.restore(); // Restaura o estado anterior do contexto
+            ctx.save();
+            ctx.scale(1, -1);
+            ctx.drawImage(columnImage, column.x, -column.gapY, columnWidth, column.gapY);
+            ctx.restore();
         }
-
 
         function updateColumns() {
             for (let i = columns.length - 1; i >= 0; i--) {
                 const column = columns[i];
-                column.x -= 3; // Reduzi para 3, movendo as colunas mais lentamente
+                column.x -= 3;
                 if (column.x + columnWidth < 0) {
                     columns.splice(i, 1);
                     score++;
@@ -211,7 +200,7 @@
             gameOver = false;
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('tryAgainButton').style.display = 'none';
-            animate(); // Reinicia o loop de animação
+            animate();
         }
 
         function animate() {
@@ -230,38 +219,30 @@
                 document.getElementById('gameOverText').style.display = 'block';
                 document.getElementById('tryAgainButton').style.display = 'block';
 
-                // Solicitar o nome do jogador
                 const playerName = prompt("Digite seu nome para o ranking:");
 
                 if (playerName) {
-                    // Salvar a pontuação do jogador com o nome
                     saveScore(playerName, score);
 
-                 // Recuperar e exibir os 10 maiores placares com nomes
-                    getTopScores().then(topScores =>  { 
+                    getTopScores().then(topScores => {
                         let rankingText = "Top 10 Scores:\n";
                         topScores.forEach((entry, index) => {
                             rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
                         });
                         alert(rankingText);
                     });
-
                 }
             }
         }
 
-
-        // Substituindo o evento de teclado por evento de toque na tela
         window.addEventListener('touchstart', function () {
             bird.velocity = bird.lift;
         });
 
-        // Garantir que todas as imagens estão carregadas antes de iniciar o jogo
         let imagesLoaded = 0;
         function checkIfReadyToStart() {
             imagesLoaded++;
             if (imagesLoaded === 2) {
-                // Ambas as imagens (pássaro e coluna) foram carregadas
                 restartGame();
             }
         }
@@ -269,10 +250,6 @@
         birdImage.onload = checkIfReadyToStart;
         columnImage.onload = checkIfReadyToStart;
     </script>
-
-
-
-
 </body>
 
 </html>
