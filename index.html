@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -44,6 +44,7 @@
                         score: doc.data().Score
                     });
                 });
+
                 return topScores;
             } catch (error) {
                 console.error("Erro ao obter as pontuações: ", error);
@@ -153,7 +154,6 @@
         let score = 0;
         let gameOver = false;
         let gameStarted = false; // Controla se o jogo já começou
-        let rankingDisplayed = false; // Variável para controlar se o ranking foi exibido
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -206,7 +206,6 @@
             columns.length = 0;
             score = 0;
             gameOver = false;
-            rankingDisplayed = false; // Reinicia a variável de ranking
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('tryAgainButton').style.display = 'none';
             document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
@@ -229,30 +228,25 @@
                 document.getElementById('gameOverText').style.display = 'block';
                 document.getElementById('tryAgainButton').style.display = 'block';
 
-                // Obter as melhores pontuações e verificar se a pontuação do jogador é suficiente
-                getTopScores().then(topScores => {
-                    let lowestScore = topScores.length > 0 ? topScores[topScores.length - 1].score : 0;
-
-                    if (score > lowestScore) {
-                        // Solicitar o nome do jogador
-                        const playerName = prompt("Digite seu nome para o ranking:");
-                        if (playerName) {
-                            saveScore(playerName, score);
-                        }
+                // Solicitar o nome do jogador se a pontuação for suficiente
+                if (score >= 10) { // Define um limite de pontuação para solicitar o nome
+                    const playerName = prompt("Digite seu nome para o ranking:");
+                    if (playerName) {
+                        saveScore(playerName, score);
+                        getTopScores().then(topScores => {
+                            let rankingText = "Top 10 Scores:\n";
+                            topScores.forEach((entry, index) => {
+                                rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
+                            });
+                            rankingText += `Sua pontuação (${score}) não entrou no ranking.`;
+                            document.getElementById('rankingText').innerText = rankingText;
+                            document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
+                        });
                     }
-
-                    let rankingText = "Top 10 Scores:\n";
-                    topScores.forEach((entry, index) => {
-                        rankingText += ${index + 1}. ${entry.name}: ${entry.score}\n;
-                    });
-
-                    // Adiciona a pontuação do jogador ao ranking
-                    rankingText += \nSua pontuação: ${score} ${topScores.length < 10 || topScores.some(entry => entry.score < score) ? "entrou" : "não entrou"} no ranking.;
-                    
-                    document.getElementById('rankingText').innerText = rankingText;
-                    document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
-                    rankingDisplayed = true; // Marca que o ranking foi exibido
-                });
+                } else {
+                    document.getElementById('rankingText').innerText = "Sua pontuação não foi suficiente para entrar no ranking.";
+                    document.getElementById('rankingText').style.display = 'block'; // Mostra a mensagem de pontuação
+                }
             }
         }
 
@@ -261,10 +255,6 @@
                 gameStarted = true; // O jogo começa no primeiro toque
                 restartGame(); // Inicia o jogo
             } else if (gameOver) {
-                // Se o jogo acabou e o ranking foi exibido, ao clicar, esconde o ranking
-                if (rankingDisplayed) {
-                    document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
-                }
                 restartGame(); // Reinicia o jogo ao clicar após Game Over
             } else {
                 bird.velocity = bird.lift;
