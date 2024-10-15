@@ -243,12 +243,14 @@
 
                     let rankingText = "Top 10 Scores:\n";
                     topScores.forEach((entry, index) => {
+                        rankingText += ${index + 1}. ${entry.name}: ${entry.score}\n;
                         rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
                     });
 
                     // Adiciona a pontuação do jogador ao ranking
+                    rankingText += \nSua pontuação: ${score} ${topScores.length < 10 || topScores.some(entry => entry.score < score) ? "entrou" : "não entrou"} no ranking.;
                     rankingText += `\nSua pontuação: ${score} ${topScores.length < 10 || topScores.some(entry => entry.score < score) ? "entrou" : "não entrou"} no ranking.`;
-                    
+
                     document.getElementById('rankingText').innerText = rankingText;
                     document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
                     rankingDisplayed = true; // Marca que o ranking foi exibido
