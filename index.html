@@ -47,6 +47,7 @@
                 const snapshot = await getDocs(
                     query(collectionScore, orderBy("Score", "desc"), limit(5))
                 );
+                console.log(snapshot)
                 snapshot.forEach((doc) => {
                     topScores.push({
                         name: doc.data().name || "Anônimo",  // Caso o nome não exista, usar "Anônimo"
