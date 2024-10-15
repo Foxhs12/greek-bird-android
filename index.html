@@ -238,7 +238,7 @@
                     saveScore(playerName, score);
 
                     // Recuperar e exibir os 10 maiores placares com nomes
-                    getTopScores().then(topScores => { 
+                    getTopScores().then(topScores => 10  { 
                         let rankingText = "Top 10 Scores:\n";
                         topScores.forEach((entry, index) => {
                             rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
