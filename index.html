@@ -102,7 +102,7 @@
             top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 48px; /* Ajustado para uma fonte menor */
+            font-size: 48px; /* Tamanho da fonte do Game Over */
             color: white;
             display: none;
             z-index: 2;
@@ -111,10 +111,10 @@
 
         #rankingText {
             position: absolute;
-            top: 55%; /* Ajustado para ficar abaixo do Game Over */
+            top: 50%; /* Ajustado para ficar abaixo do Game Over */
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 14px; /* Reduzido para uma fonte menor */
+            font-size: 16px; /* Ajuste do tamanho da fonte */
             color: white;
             display: none;
             z-index: 2;
@@ -154,8 +154,8 @@
             y: canvas.height / 2,
             width: 80,
             height: 80,
-            gravity: 0.25, // Gravidade ajustada para uma queda mais leve
-            lift: -7, // Força do impulso ajustada
+            gravity: 0.25, // Gravidade ajustada
+            lift: -6, // Força do impulso ajustada
             velocity: 0
         };
 
