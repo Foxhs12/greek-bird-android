@@ -45,7 +45,7 @@
             try { 
                 const collectionScore = collection(db, "score")
                 const snapshot = await getDocs(
-                    query(collectionScore, orderBy("Score", "desc"), limit(5))
+                    query(collectionScore, orderBy("Score", "desc"), limit(10))
                 );
                 snapshot.forEach((doc)=> console.log(doc.data()))
                 snapshot.forEach((doc) => {
