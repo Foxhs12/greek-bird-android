@@ -192,6 +192,27 @@
             }
         }
 
+        async function handleGameOver() {
+            document.getElementById('gameOverText').style.display = 'block';
+            
+            // Solicitar o nome do jogador e salvar a pontuação
+            const playerName = prompt("Digite seu nome para o ranking:");
+            if (playerName) {
+                await saveScore(playerName, score);
+            }
+            
+            // Obter e exibir o ranking antes de mostrar o botão de reiniciar
+            const topScores = await getTopScores();
+            let rankingText = "Top 10 Scores:\n";
+            topScores.forEach((entry, index) => {
+                rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
+            });
+            alert(rankingText);
+
+            // Mostrar o botão de reiniciar apenas depois de exibir o ranking
+            document.getElementById('tryAgainButton').style.display = 'block';
+        }
+
         function restartGame() {
             bird.y = canvas.height / 2;
             bird.velocity = 0;
@@ -216,22 +237,7 @@
             if (!gameOver) {
                 requestAnimationFrame(animate);
             } else {
-                document.getElementById('gameOverText').style.display = 'block';
-                document.getElementById('tryAgainButton').style.display = 'block';
-
-                const playerName = prompt("Digite seu nome para o ranking:");
-
-                if (playerName) {
-                    saveScore(playerName, score);
-
-                    getTopScores().then(topScores => {
-                        let rankingText = "Top 10 Scores:\n";
-                        topScores.forEach((entry, index) => {
-                            rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
-                        });
-                        alert(rankingText);
-                    });
-                }
+                handleGameOver();
             }
         }
 
