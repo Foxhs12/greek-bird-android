@@ -19,7 +19,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Função para salvar a pontuação e o nome do jogador no Firestore
         window.saveScore = async function saveScore(playerName, score) {
             try {
                 const collectionScore = collection(db, "score");
@@ -32,7 +31,6 @@
             }
         }
 
-        // Função para obter os 10 maiores placares e nomes
         window.getTopScores = async function getTopScores() {
             const topScores = [];
             try {
@@ -46,7 +44,6 @@
                         score: doc.data().Score
                     });
                 });
-
                 return topScores;
             } catch (error) {
                 console.error("Erro ao obter as pontuações: ", error);
@@ -54,7 +51,6 @@
             }
         }
 
-        // Função para verificar se a nova pontuação pode ser salva
         window.canSaveScore = async function canSaveScore(newScore) {
             const topScores = await getTopScores();
             if (topScores.length < 10) {
@@ -68,14 +64,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greek Bird</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Gloock:wght@700&display=swap'); /* Fonte estilo grego */
+        @import url('https://fonts.googleapis.com/css2?family=Gloock:wght@700&display=swap');
 
         body {
-            font-family: 'Gloock', serif; /* Aplicando a fonte grega */
+            font-family: 'Gloock', serif;
             margin: 0;
             padding: 0;
             overflow: hidden;
-            cursor: pointer; /* Mudando o cursor para indicar que é clicável */
+            cursor: pointer;
         }
 
         #background {
@@ -104,15 +100,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 64px; /* Aumentando o tamanho da fonte */
+            font-size: 64px;
             color: white;
             display: none;
             z-index: 2;
             text-align: center;
-        }
-
-        #tryAgainButton {
-            display: none; /* Removido, pois não é mais necessário */
         }
     </style>
 </head>
@@ -197,7 +189,6 @@
 
         async function handleGameOver() {
             document.getElementById('gameOverText').style.display = 'block';
-            
             const playerName = prompt("Digite seu nome para o ranking:");
             if (playerName) {
                 const canSave = await canSaveScore(score);
@@ -207,7 +198,6 @@
                     alert("Sua pontuação não é alta o suficiente para entrar no ranking.");
                 }
             }
-            
             const topScores = await getTopScores();
             let rankingText = "Top 10 Scores:\n";
             topScores.forEach((entry, index) => {
@@ -251,6 +241,8 @@
         window.addEventListener('click', function () {
             if (gameOver) {
                 restartGame();
+            } else {
+                bird.velocity = bird.lift; // Fazer o pássaro subir se não estiver em Game Over
             }
         });
 
