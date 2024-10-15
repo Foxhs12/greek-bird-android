@@ -102,7 +102,7 @@
             top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 64px;
+            font-size: 48px; /* Ajustado para uma fonte menor */
             color: white;
             display: none;
             z-index: 2;
@@ -114,14 +114,14 @@
             top: 55%; /* Ajustado para ficar abaixo do Game Over */
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 16px; /* Reduzido para uma fonte menor */
+            font-size: 14px; /* Reduzido para uma fonte menor */
             color: white;
             display: none;
             z-index: 2;
-            background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente */
-            padding: 10px; /* Reduzido o padding */
-            border: 3px solid white; /* Borda branca */
-            border-radius: 10px; /* Bordas arredondadas */
+            background-color: rgba(0, 0, 0, 0.8); /* Fundo semi-transparente */
+            padding: 10px; /* Ajuste no padding */
+            border: 2px solid white; /* Borda branca */
+            border-radius: 5px; /* Bordas arredondadas */
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidade */
             white-space: pre-wrap; /* Para manter a formatação do texto */
             max-width: 90%; /* Limita a largura da caixa */
@@ -154,8 +154,8 @@
             y: canvas.height / 2,
             width: 80,
             height: 80,
-            gravity: 0.15,
-            lift: -5,
+            gravity: 0.25, // Gravidade ajustada para uma queda mais leve
+            lift: -7, // Força do impulso ajustada
             velocity: 0
         };
 
@@ -251,9 +251,6 @@
             updateBird();
             drawBird();
             updateColumns();
-
-            ctx.fillStyle = 'white';
-            ctx.font = '24px Arial';
             ctx.fillText(`Score: ${score}`, 10, 30);
 
             if (gameOver) {
