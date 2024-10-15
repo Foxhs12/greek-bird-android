@@ -44,23 +44,36 @@
                         score: doc.data().Score
                     });
                 });
-
                 return topScores;
             } catch (error) {
                 console.error("Erro ao obter as pontuações: ", error);
                 return [];
             }
         }
+
+        window.canSaveScore = async function canSaveScore(newScore) {
+            const topScores = await getTopScores();
+            if (topScores.length < 10) {
+                return true;
+            }
+            const lowestScore = topScores[topScores.length - 1].score;
+            return newScore > lowestScore;
+        }
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greek Bird</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gloock:wght@700&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Gloock', serif;
             margin: 0;
             padding: 0;
             overflow: hidden;
+            cursor: pointer;
+            color: white; /* Texto em branco */
+            user-select: none; /* Desativar seleção de texto */
         }
 
         #background {
@@ -86,36 +99,34 @@
 
         #gameOverText {
             position: absolute;
-            top: 50%;
+            top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 48px;
+            font-size: 64px;
             color: white;
             display: none;
             z-index: 2;
-        }
-
-        #tryAgainButton {
-            position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 10px 20px;
-            font-size: 24px;
-            display: none;
-            z-index: 2;
+            text-align: center;
         }
 
         #rankingText {
             position: absolute;
-            top: 70%;
+            top: 55%; /* Ajustado para ficar abaixo do Game Over */
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid black;
-            padding: 10px;
-            display: none; /* Começa invisível */
+            font-size: 16px; /* Reduzido para uma fonte menor */
+            color: white;
+            display: none;
             z-index: 2;
+            background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente */
+            padding: 10px; /* Reduzido o padding */
+            border: 3px solid white; /* Borda branca */
+            border-radius: 10px; /* Bordas arredondadas */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidade */
+            white-space: pre-wrap; /* Para manter a formatação do texto */
+            max-width: 90%; /* Limita a largura da caixa */
+            text-align: center; /* Centraliza o texto dentro da caixa */
+            pointer-events: none; /* Impede interação com a caixa */
         }
     </style>
 </head>
@@ -124,7 +135,6 @@
     <div id="background"></div>
     <canvas id="gameCanvas"></canvas>
     <div id="gameOverText">Game Over</div>
-    <button id="tryAgainButton" onclick="restartGame()">Try Again</button>
     <div id="rankingText"></div>
 
     <script>
@@ -135,6 +145,7 @@
 
         const birdImage = new Image();
         birdImage.src = 'socrates.png';
+
         const columnImage = new Image();
         columnImage.src = 'column.jpeg';
 
@@ -153,7 +164,6 @@
         const gapHeight = 250;
         let score = 0;
         let gameOver = false;
-        let gameStarted = false; // Controla se o jogo já começou
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -200,6 +210,31 @@
             }
         }
 
+        async function handleGameOver() {
+            document.getElementById('gameOverText').style.display = 'block';
+
+            const canSave = await canSaveScore(score);
+            if (canSave) {
+                const playerName = prompt("Digite seu nome para o ranking:");
+                if (playerName) {
+                    await saveScore(playerName, score);
+                }
+            }
+
+            const topScores = await getTopScores();
+            let rankingText = "Top 10 Scores:\n";
+            topScores.forEach((entry, index) => {
+                rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
+            });
+
+            if (!canSave) {
+                rankingText += "Sua pontuação não foi alta o suficiente para entrar no ranking.\n";
+            }
+
+            document.getElementById('rankingText').innerText = rankingText;
+            document.getElementById('rankingText').style.display = 'block';
+        }
+
         function restartGame() {
             bird.y = canvas.height / 2;
             bird.velocity = 0;
@@ -207,8 +242,7 @@
             score = 0;
             gameOver = false;
             document.getElementById('gameOverText').style.display = 'none';
-            document.getElementById('tryAgainButton').style.display = 'none';
-            document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
+            document.getElementById('rankingText').style.display = 'none';
             animate();
         }
 
@@ -220,46 +254,33 @@
 
             ctx.fillStyle = 'white';
             ctx.font = '24px Arial';
-            ctx.fillText('Score: ' + score, 10, 30);
+            ctx.fillText(`Score: ${score}`, 10, 30);
 
-            if (!gameOver) {
-                requestAnimationFrame(animate);
+            if (gameOver) {
+                handleGameOver();
             } else {
-                document.getElementById('gameOverText').style.display = 'block';
-                document.getElementById('tryAgainButton').style.display = 'block';
-
-                // Solicitar o nome do jogador se a pontuação for suficiente
-                if (score >= 10) { // Define um limite de pontuação para solicitar o nome
-                    const playerName = prompt("Digite seu nome para o ranking:");
-                    if (playerName) {
-                        saveScore(playerName, score);
-                        getTopScores().then(topScores => {
-                            let rankingText = "Top 10 Scores:\n";
-                            topScores.forEach((entry, index) => {
-                                rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
-                            });
-                            rankingText += `Sua pontuação (${score}) não entrou no ranking.`;
-                            document.getElementById('rankingText').innerText = rankingText;
-                            document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
-                        });
-                    }
-                } else {
-                    document.getElementById('rankingText').innerText = "Sua pontuação não foi suficiente para entrar no ranking.";
-                    document.getElementById('rankingText').style.display = 'block'; // Mostra a mensagem de pontuação
-                }
+                requestAnimationFrame(animate);
             }
         }
 
-        canvas.addEventListener('click', async (event) => {
-            if (!gameStarted) {
-                gameStarted = true; // O jogo começa no primeiro toque
+        window.addEventListener('click', function () {
+            if (gameOver) {
                 restartGame();
-            } else if (gameOver) {
-                restartGame(); // Reinicia o jogo ao clicar após Game Over
             } else {
                 bird.velocity = bird.lift;
             }
         });
+
+        let imagesLoaded = 0;
+        function checkIfReadyToStart() {
+            imagesLoaded++;
+            if (imagesLoaded === 2) {
+                restartGame();
+            }
+        }
+
+        birdImage.onload = checkIfReadyToStart;
+        columnImage.onload = checkIfReadyToStart;
     </script>
 </body>
 
