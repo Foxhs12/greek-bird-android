@@ -22,36 +22,36 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const scoreMapping = {
-            player: 'Player',
-            score: 'Score'
-        };
-
-
+        // Função para salvar a pontuação e o nome do jogador no Firestore
         window.saveScore = async function saveScore(playerName, score) {
             try {
-                const collectionScore = collection(db, "score");
+                const collectionScore = collection(db, "score") 
                 await addDoc(collectionScore, {
-                    [scoreMapping.player]: playerName,
-                    [scoreMapping.score]: score
+                    Player: playerName,
+                    Score: score
                 });
             } catch (error) {
                 console.error("Erro ao salvar a pontuação: ", error);
             }
-        };
+        }
 
+        if (gameOver) {
+
+        }
+
+        // Função para obter os 5 maiores placares e nomes
         window.getTopScores = async function getTopScores() {
             const topScores = [];
-            try {
-                const collectionScore = collection(db, "score");
+            try { 
+                const collectionScore = collection(db, "score")
                 const snapshot = await getDocs(
-                    query(collectionScore, orderBy(scoreMapping.score, "desc"), limit(5))
+                    query(collectionScore, orderBy("Score", "desc"), limit(5))
                 );
-
+                snapshot.forEach((doc)=> console.log(doc.data()))
                 snapshot.forEach((doc) => {
                     topScores.push({
-                        name: doc.data()[scoreMapping.player] || "Anônimo",
-                        score: doc.data()[scoreMapping.score]
+                        name: doc.data().Player || "Anônimo",  // Caso o nome não exista, usar "Anônimo"
+                        score: doc.data().Score
                     });
                 });
 
@@ -60,8 +60,7 @@
                 console.error("Erro ao obter as pontuações: ", error);
                 return [];
             }
-        };
-
+        }
 
 
     </script>
