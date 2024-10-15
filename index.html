@@ -72,7 +72,7 @@
             padding: 0;
             overflow: hidden;
             cursor: pointer;
-            color: white; /* Texto em branco */
+            color: white;
             user-select: none; /* Desativar seleção de texto */
         }
 
@@ -111,12 +111,12 @@
 
         #rankingText {
             position: absolute;
-            top: 50%; /* Ajustado para ficar abaixo do Game Over */
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 16px; /* Ajuste do tamanho da fonte */
             color: white;
-            display: none;
+            display: none; /* Inicialmente escondido */
             z-index: 2;
             background-color: rgba(0, 0, 0, 0.8); /* Fundo semi-transparente */
             padding: 10px; /* Ajuste no padding */
@@ -126,7 +126,6 @@
             white-space: pre-wrap; /* Para manter a formatação do texto */
             max-width: 90%; /* Limita a largura da caixa */
             text-align: center; /* Centraliza o texto dentro da caixa */
-            pointer-events: none; /* Impede interação com a caixa */
         }
     </style>
 </head>
@@ -232,7 +231,7 @@
             }
 
             document.getElementById('rankingText').innerText = rankingText;
-            document.getElementById('rankingText').style.display = 'block';
+            document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
         }
 
         function restartGame() {
@@ -265,6 +264,14 @@
                 restartGame();
             } else {
                 bird.velocity = bird.lift;
+            }
+
+            // Exibir e ocultar ranking ao clicar
+            const rankingTextElement = document.getElementById('rankingText');
+            if (rankingTextElement.style.display === 'block') {
+                rankingTextElement.style.display = 'none'; // Esconde o ranking
+            } else {
+                rankingTextElement.style.display = 'block'; // Mostra o ranking
             }
         });
 
