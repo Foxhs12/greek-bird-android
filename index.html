@@ -72,7 +72,8 @@
             transform: translate(-50%, -50%);
             font-size: 48px;
             font-family: 'Gloock', serif;
-            color: #DAA520; /* Dourado escuro */
+            color: #DAA520;
+            /* Dourado escuro */
             display: none;
             z-index: 2;
             white-space: nowrap;
@@ -85,7 +86,8 @@
             transform: translate(-50%, -50%);
             font-size: 36px;
             font-family: 'Gloock', serif;
-            color: #DAA520; /* Dourado escuro */
+            color: #DAA520;
+            /* Dourado escuro */
             display: block;
             z-index: 2;
             white-space: nowrap;
@@ -207,41 +209,50 @@
             });
 
             rankingText += `\nSua pontuação: ${score}`;
+
+            // Exibir o ranking no elemento da página (opcional)
             document.getElementById('rankingText').innerText = rankingText;
             document.getElementById('rankingText').style.display = 'block';
+
+            // Retorne a string do ranking
+            return rankingText;
         }
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            updateBird();
-            drawBird();
-            updateColumns();
+        // Função que exibe o ranking no alerta
+        async function showRankingAlert() {
+            const rankingText = await displayRanking(); // Aguarde a função e capture o retorno
 
-            ctx.fillStyle = 'white';
-            ctx.font = '24px Arial';
-            ctx.fillText('Score: ' + score, 10, 30);
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                updateBird();
+                drawBird();
+                updateColumns();
 
-            if (!gameOver) {
-                requestAnimationFrame(animate);
-            } else {
-                document.getElementById('gameOverText').style.display = 'block';
-                alert(rankingText);
-                displayRanking(); // Chama a função para mostrar o ranking
+                ctx.fillStyle = 'white';
+                ctx.font = '24px Arial';
+                ctx.fillText('Score: ' + score, 10, 30);
+
+                if (!gameOver) {
+                    requestAnimationFrame(animate);
+                } else {
+                    document.getElementById('gameOverText').style.display = 'block';
+                    alert(rankingText); 
+                    displayRanking(); // Chama a função para mostrar o ranking
+                }
             }
-        }
 
-        canvas.addEventListener('click', (event) => {
-            if (!gameStarted) {
-                gameStarted = true;
-                document.getElementById('touchToStart').style.display = 'none';
-                restartGame();
-            } else if (gameOver) {
-                displayRanking(); // Chama a função para mostrar o ranking
-                restartGame();
-            } else {
-                bird.velocity = bird.lift;
-            }
-        });
+            canvas.addEventListener('click', (event) => {
+                if (!gameStarted) {
+                    gameStarted = true;
+                    document.getElementById('touchToStart').style.display = 'none';
+                    restartGame();
+                } else if (gameOver) {
+                    displayRanking(); // Chama a função para mostrar o ranking
+                    restartGame();
+                } else {
+                    bird.velocity = bird.lift;
+                }
+            });
     </script>
 </body>
 
