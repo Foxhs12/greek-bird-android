@@ -236,6 +236,7 @@
                 document.getElementById('touchToStart').style.display = 'none';
                 restartGame();
             } else if (gameOver) {
+                displayRanking();
                 restartGame();
             } else {
                 bird.velocity = bird.lift;
