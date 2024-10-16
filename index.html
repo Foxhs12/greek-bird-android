@@ -7,6 +7,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getFirestore, collection, getDocs, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
+         const firebaseConfig = {
         const firebaseConfig = {
             apiKey: "AIzaSyDlaMVBRQlulpV9MbVxasuGblF38KkY5f8",
             authDomain: "greek-bird.firebaseapp.com",
@@ -72,8 +73,7 @@
             transform: translate(-50%, -50%);
             font-size: 48px;
             font-family: 'Gloock', serif;
-            color: #DAA520;
-            /* Dourado escuro */
+            color: white;
             display: none;
             z-index: 2;
             white-space: nowrap;
@@ -86,8 +86,7 @@
             transform: translate(-50%, -50%);
             font-size: 36px;
             font-family: 'Gloock', serif;
-            color: #DAA520;
-            /* Dourado escuro */
+            color: white;
             display: block;
             z-index: 2;
             white-space: nowrap;
@@ -104,8 +103,6 @@
             display: none;
             z-index: 2;
             white-space: pre-line;
-            font-size: 20px;
-            font-family: 'Gloock', serif;
         }
     </style>
 </head>
@@ -144,6 +141,7 @@
         let score = 0;
         let gameOver = false;
         let gameStarted = false;
+        let rankingDisplayed = false;
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -196,6 +194,7 @@
             columns.length = 0;
             score = 0;
             gameOver = false;
+            rankingDisplayed = false;
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('rankingText').style.display = 'none';
             animate();
@@ -205,48 +204,47 @@
             const topScores = await getTopScores();
             let rankingText = "Top 10 Scores:\n";
             topScores.forEach((entry, index) => {
-                rankingText += ${index + 1}. ${entry.name}: ${entry.score}\n;
+                rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
             });
 
-            rankingText += \nSua pontuação: ${score};
+            rankingText += `\nSua pontuação: ${score}`;
             document.getElementById('rankingText').innerText = rankingText;
             document.getElementById('rankingText').style.display = 'block';
+            rankingDisplayed = true;
         }
 
-        // Função que exibe o ranking no alerta
-        async function showRankingAlert() {
-            const rankingText = await displayRanking(); // Aguarde a função e capture o retorno
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            updateBird();
+            drawBird();
+            updateColumns();
 
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                updateBird();
-                drawBird();
-                updateColumns();
+            ctx.fillStyle = 'white';
+            ctx.font = '24px Arial';
+            ctx.fillText('Score: ' + score, 10, 30);
 
-                ctx.fillStyle = 'white';
-                ctx.font = '24px Arial';
-                ctx.fillText('Score: ' + score, 10, 30);
-
-                if (!gameOver) {
-                    requestAnimationFrame(animate);
-                } else {
-                    document.getElementById('gameOverText').style.display = 'block';
-                    displayRanking(); // Chama a função para mostrar o ranking
-                }
+            if (!gameOver) {
+                requestAnimationFrame(animate);
+            } else {
+                document.getElementById('gameOverText').style.display = 'block';
+                displayRanking();
             }
+        }
 
-            canvas.addEventListener('click', (event) => {
-                if (!gameStarted) {
-                    gameStarted = true;
-                    document.getElementById('touchToStart').style.display = 'none';
-                    restartGame();
-                } else if (gameOver) {
-                    displayRanking(); // Chama a função para mostrar o ranking
-                    restartGame();
-                } else {
-                    bird.velocity = bird.lift;
+        canvas.addEventListener('click', (event) => {
+            if (!gameStarted) {
+                gameStarted = true;
+                document.getElementById('touchToStart').style.display = 'none';
+                restartGame();
+            } else if (gameOver) {
+                if (rankingDisplayed) {
+                    document.getElementById('rankingText').style.display = 'none';
                 }
-            });
+                restartGame();
+            } else {
+                bird.velocity = bird.lift;
+            }
+        });
     </script>
 </body>
 
