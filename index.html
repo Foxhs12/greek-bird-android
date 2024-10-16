@@ -114,7 +114,7 @@
         #rankingButton {
             position: absolute;
             top: 40px; /* Ajuste para o botão ficar abaixo do score */
-            left: 0px; /* Mover mais à esquerda */
+            left: 10px; /* Mover mais à esquerda */
             font-size: 24px;
             font-family: 'Gloock', serif;
             color: #b8860b;
@@ -274,9 +274,6 @@
                 document.getElementById('rankingButton').style.display = 'block'; // Mostrar o botão de ranking
                 restartGame();
             } else if (gameOver) {
-                if (rankingDisplayed) {
-                    document.getElementById('rankingText').style.display = 'none';
-                }
                 restartGame();
             } else {
                 bird.velocity = bird.lift;
