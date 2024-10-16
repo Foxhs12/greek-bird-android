@@ -173,6 +173,17 @@
             animate();
         }
 
+        async function getTopScores() {
+            // Função mock para retornar pontuações de exemplo
+            return [
+                { name: 'Player1', score: 50 },
+                { name: 'Player2', score: 40 },
+                { name: 'Player3', score: 30 },
+                { name: 'Player4', score: 20 },
+                { name: 'Player5', score: 10 },
+            ];
+        }
+
         async function displayRanking() {
             const topScores = await getTopScores();
             let rankingText = "Top 10 Scores:\n";
