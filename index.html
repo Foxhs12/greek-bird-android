@@ -104,7 +104,7 @@
             background: rgba(255, 255, 255, 0.8);
             border: 2px solid black;
             padding: 10px;
-            display: none;
+            display: none; /* Inicialmente escondido */
             z-index: 2;
             white-space: pre-line;
             max-height: 300px; /* Limitar altura da caixa de ranking */
@@ -122,6 +122,7 @@
             border: none;
             cursor: pointer;
             z-index: 2;
+            display: none; /* Inicialmente escondido */
         }
     </style>
 </head>
@@ -217,6 +218,7 @@
             rankingDisplayed = false;
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('rankingText').style.display = 'none';
+            document.getElementById('rankingButton').style.display = 'none'; // Esconder o botão ao reiniciar
             animate();
         }
 
@@ -229,7 +231,7 @@
 
             rankingText += `\nSua pontuação: ${score}`;
             document.getElementById('rankingText').innerText = rankingText;
-            document.getElementById('rankingText').style.display = 'block';
+            document.getElementById('rankingText').style.display = 'block'; // Mostrar o ranking
             rankingDisplayed = true;
         }
 
@@ -237,7 +239,7 @@
             if (!rankingDisplayed) {
                 displayRanking();
             } else {
-                document.getElementById('rankingText').style.display = 'none';
+                document.getElementById('rankingText').style.display = 'none'; // Esconder o ranking
                 rankingDisplayed = false;
             }
         }
@@ -269,6 +271,7 @@
             if (!gameStarted) {
                 gameStarted = true;
                 document.getElementById('touchToStart').style.display = 'none';
+                document.getElementById('rankingButton').style.display = 'block'; // Mostrar o botão de ranking
                 restartGame();
             } else if (gameOver) {
                 if (rankingDisplayed) {
