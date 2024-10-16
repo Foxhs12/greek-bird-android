@@ -199,7 +199,7 @@
             animate();
         }
 
-        async function displayRanking() {
+        function displayRanking() {
             const topScores = await getTopScores();
             let rankingText = "Top 10 Scores:\n";
             topScores.forEach((entry, index) => {
@@ -225,9 +225,8 @@
                 requestAnimationFrame(animate);
             } else {
                 document.getElementById('gameOverText').style.display = 'block';
-                canvas.addEventListener('click', function() {
+                alert(rankingText);
                 displayRanking(); // Chama a função para mostrar o ranking
-            });
             }
         }
 
@@ -237,9 +236,7 @@
                 document.getElementById('touchToStart').style.display = 'none';
                 restartGame();
             } else if (gameOver) {
-                canvas.addEventListener('click', function() {
                 displayRanking(); // Chama a função para mostrar o ranking
-            });
                 restartGame();
             } else {
                 bird.velocity = bird.lift;
