@@ -230,19 +230,36 @@
             animate();
         }
 
-        canvas.addEventListener('click', (event) => {
-            if (!gameStarted) {
-                gameStarted = true;
-                document.getElementById('touchToStart').style.display = 'none';
-                restartGame();
-            } else if (gameOver) {
-                displayRanking();
-                document.getElementById('touchToStart').style.display = 'none';
-                restartGame();
-            } else {
-                bird.velocity = bird.lift;
-            }
-        });
+       let rankingVisible = false;
+
+canvas.addEventListener('click', (event) => {
+    if (!gameStarted) {
+        gameStarted = true;
+        document.getElementById('touchToStart').style.display = 'none';
+        restartGame();
+    } else if (gameOver) {
+        if (!rankingVisible) {
+            displayRanking(); // Exibir o ranking se não estiver visível
+            rankingVisible = true; // Atualizar o estado do ranking
+            document.getElementById('touchToStart').style.display = 'none';
+        } else {
+            // Se o ranking já estiver visível, ocultá-lo
+            hideRanking(); // Você precisará implementar esta função para ocultar o ranking
+            rankingVisible = false; // Atualizar o estado do ranking
+        }
+        restartGame();
+    } else {
+        bird.velocity = bird.lift;
+    }
+});
+
+// Função para ocultar o ranking
+function hideRanking() {
+    // Lógica para ocultar o ranking
+    const rankingElement = document.getElementById('ranking'); // Supondo que você tenha um elemento para o ranking
+    rankingElement.style.display = 'none'; // Ocultar o ranking
+}
+
 
         // Inicia a animação assim que a página carrega
         animate();
