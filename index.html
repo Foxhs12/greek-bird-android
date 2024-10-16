@@ -199,7 +199,7 @@
             animate();
         }
 
-        function displayRanking() {
+        async function displayRanking() {
             const topScores = await getTopScores();
             let rankingText = "Top 10 Scores:\n";
             topScores.forEach((entry, index) => {
