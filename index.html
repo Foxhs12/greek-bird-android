@@ -187,18 +187,6 @@
             }
         }
 
-        function restartGame() {
-            bird.y = canvas.height / 2;
-            bird.velocity = 0;
-            columns.length = 0;
-            score = 0;
-            gameOver = false;
-            rankingDisplayed = false;
-            document.getElementById('gameOverText').style.display = 'none';
-            document.getElementById('rankingText').style.display = 'none';
-            animate();
-        }
-
         async function displayRanking() {
             const topScores = await getTopScores();
             let rankingText = "Top 10 Scores:\n";
@@ -230,20 +218,32 @@
             }
         }
 
+        function restartGame() {
+            bird.y = canvas.height / 2;
+            bird.velocity = 0;
+            columns.length = 0;
+            score = 0;
+            gameOver = false;
+            rankingDisplayed = false;
+            document.getElementById('gameOverText').style.display = 'none';
+            document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking quando o jogo reinicia
+            animate();
+        }
+
         canvas.addEventListener('click', (event) => {
             if (!gameStarted) {
                 gameStarted = true;
                 document.getElementById('touchToStart').style.display = 'none';
                 restartGame();
             } else if (gameOver) {
-                if (rankingDisplayed) {
-                    document.getElementById('rankingText').style.display = 'none';
-                }
                 restartGame();
             } else {
                 bird.velocity = bird.lift;
             }
         });
+
+        // Inicia a animação assim que a página carrega
+        animate();
     </script>
 </body>
 
