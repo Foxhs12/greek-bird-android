@@ -41,13 +41,15 @@
 
         #gameOverText {
             position: absolute;
-            top: 30%; /* Subir o letreiro mais para cima */
+            top: 30%; /* Posição mais alta */
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 48px;
+            font-family: 'Gloock', serif; /* Aplicando a fonte Gloock */
             color: white;
             display: none;
             z-index: 2;
+            white-space: nowrap; /* Para garantir que fique em uma linha */
         }
 
         #touchToStart {
@@ -192,7 +194,7 @@
 
                     rankingText += `\nSua pontuação: ${score}`;
                     document.getElementById('rankingText').innerText = rankingText;
-                    document.getElementById('rankingText').style.display = 'block';
+                    document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
                     rankingDisplayed = true; // Marca que o ranking foi exibido
                 });
             }
