@@ -225,8 +225,9 @@
                 requestAnimationFrame(animate);
             } else {
                 document.getElementById('gameOverText').style.display = 'block';
-                alert(rankingText);
-                displayRanking();
+                canvas.addEventListener('click', function() {
+                displayRanking(); // Chama a função para mostrar o ranking
+            });
             }
         }
 
@@ -236,7 +237,9 @@
                 document.getElementById('touchToStart').style.display = 'none';
                 restartGame();
             } else if (gameOver) {
-                alert(rankingText);
+                canvas.addEventListener('click', function() {
+                displayRanking(); // Chama a função para mostrar o ranking
+            });
                 restartGame();
             } else {
                 bird.velocity = bird.lift;
