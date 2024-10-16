@@ -72,7 +72,7 @@
             transform: translate(-50%, -50%);
             font-size: 48px;
             font-family: 'Gloock', serif;
-            color: white;
+            color: #b8860b; /* Dourado escuro */
             display: none;
             z-index: 2;
             white-space: nowrap;
@@ -85,7 +85,7 @@
             transform: translate(-50%, -50%);
             font-size: 36px;
             font-family: 'Gloock', serif;
-            color: white;
+            color: #b8860b; /* Dourado escuro */
             display: block;
             z-index: 2;
             white-space: nowrap;
@@ -226,40 +226,28 @@
             gameOver = false;
             rankingDisplayed = false;
             document.getElementById('gameOverText').style.display = 'none';
-            document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking quando o jogo reinicia
+            // Não esconder o ranking quando o jogo reinicia
             animate();
         }
 
-       let rankingVisible = false;
-
-canvas.addEventListener('click', (event) => {
-    if (!gameStarted) {
-        gameStarted = true;
-        document.getElementById('touchToStart').style.display = 'none';
-        restartGame();
-    } else if (gameOver) {
-        if (!rankingVisible) {
-            displayRanking(); // Exibir o ranking se não estiver visível
-            rankingVisible = true; // Atualizar o estado do ranking
-            document.getElementById('touchToStart').style.display = 'none';
-        } else {
-            // Se o ranking já estiver visível, ocultá-lo
-            hideRanking(); // Você precisará implementar esta função para ocultar o ranking
-            rankingVisible = false; // Atualizar o estado do ranking
-        }
-        restartGame();
-    } else {
-        bird.velocity = bird.lift;
-    }
-});
-
-// Função para ocultar o ranking
-function hideRanking() {
-    // Lógica para ocultar o ranking
-    const rankingElement = document.getElementById('ranking'); // Supondo que você tenha um elemento para o ranking
-    rankingElement.style.display = 'none'; // Ocultar o ranking
-}
-
+        canvas.addEventListener('click', (event) => {
+            if (!gameStarted) {
+                gameStarted = true;
+                document.getElementById('touchToStart').style.display = 'none';
+                restartGame();
+            } else if (gameOver) {
+                // Mantenha o ranking visível até que a tela seja tocada
+                if (!rankingDisplayed) {
+                    displayRanking();
+                } else {
+                    document.getElementById('rankingText').style.display = 'none'; // Esconder ranking se já estiver visível
+                    restartGame();
+                }
+                document.getElementById('touchToStart').style.display = 'none';
+            } else {
+                bird.velocity = bird.lift;
+            }
+        });
 
         // Inicia a animação assim que a página carrega
         animate();
