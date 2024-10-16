@@ -3,7 +3,11 @@
 
 <head>
     <script type="module">
-        const firebaseConfig = {
+        // Firebase configuration
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+         const firebaseConfig = {
             apiKey: "AIzaSyDlaMVBRQlulpV9MbVxasuGblF38KkY5f8",
             authDomain: "greek-bird.firebaseapp.com",
             projectId: "greek-bird",
@@ -12,6 +16,20 @@
             appId: "1:58870766246:web:6eb9c796ec11abd0e5f267",
             measurementId: "G-PZBLWMH5W6"
         };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function getTopScores() {
+            const scoresRef = collection(db, "scores");
+            const q = query(scoresRef, orderBy("score", "desc"), limit(10));
+            const querySnapshot = await getDocs(q);
+            const topScores = [];
+            querySnapshot.forEach((doc) => {
+                topScores.push(doc.data());
+            });
+            return topScores;
+        }
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -179,17 +197,6 @@
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('rankingText').style.display = 'none';
             animate();
-        }
-
-        async function getTopScores() {
-            // Função mock para retornar pontuações de exemplo
-            return [
-                { name: 'Player1', score: 50 },
-                { name: 'Player2', score: 40 },
-                { name: 'Player3', score: 30 },
-                { name: 'Player4', score: 20 },
-                { name: 'Player5', score: 10 },
-            ];
         }
 
         async function displayRanking() {
