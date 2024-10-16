@@ -74,33 +74,33 @@
         #gameOverText {
             position: absolute;
             top: 30%;
-            left: 50%; /* Centralizado horizontalmente */
+            left: 50%;
             transform: translate(-50%, -50%);
             font-size: 48px;
             font-family: 'Gloock', serif;
             color: #b8860b;
             display: none;
             z-index: 2;
-            white-space: nowrap; /* Para garantir que fique em uma linha */
+            white-space: nowrap;
         }
 
         #touchToStart {
             position: absolute;
             top: 30%;
-            left: 50%; /* Centralizado horizontalmente */
+            left: 50%;
             transform: translate(-50%, -50%);
             font-size: 36px;
             font-family: 'Gloock', serif;
             color: #b8860b;
             display: block;
             z-index: 2;
-            white-space: nowrap; /* Para garantir que fique em uma linha */
+            white-space: nowrap;
         }
 
         #rankingText {
             position: absolute;
-            top: 80px; /* Ajuste para exibir corretamente o ranking */
-            left: 10px; /* Alinhado à esquerda */
+            top: 80px;
+            left: 10px;
             background: rgba(255, 255, 255, 0.8);
             border: 2px solid black;
             padding: 10px;
@@ -113,8 +113,8 @@
 
         #rankingButton {
             position: absolute;
-            top: 40px; /* Ajuste para o botão ficar abaixo do score */
-            left: 0px; /* Mover mais à esquerda */
+            top: 40px;
+            left: 0px;
             font-size: 24px;
             font-family: 'Gloock', serif;
             color: #b8860b;
@@ -271,7 +271,7 @@
             if (!gameStarted) {
                 gameStarted = true;
                 document.getElementById('touchToStart').style.display = 'none';
-                document.getElementById('rankingButton').style.display = 'block'; // Mostrar o botão de ranking
+                document.getElementById('rankingButton').style.display = 'block'; // Mostrar o botão de ranking ao iniciar o jogo
                 restartGame();
             } else if (gameOver) {
                 if (rankingDisplayed) {
