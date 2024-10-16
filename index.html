@@ -74,37 +74,37 @@
         #gameOverText {
             position: absolute;
             top: 30%;
-            left: 50%;
+            left: 50%; /* Centralizado horizontalmente */
             transform: translate(-50%, -50%);
             font-size: 48px;
             font-family: 'Gloock', serif;
             color: #b8860b;
             display: none;
             z-index: 2;
-            white-space: nowrap;
+            white-space: nowrap; /* Para garantir que fique em uma linha */
         }
 
         #touchToStart {
             position: absolute;
             top: 30%;
-            left: 50%;
+            left: 50%; /* Centralizado horizontalmente */
             transform: translate(-50%, -50%);
             font-size: 36px;
             font-family: 'Gloock', serif;
             color: #b8860b;
             display: block;
             z-index: 2;
-            white-space: nowrap;
+            white-space: nowrap; /* Para garantir que fique em uma linha */
         }
 
         #rankingText {
             position: absolute;
-            top: 80px;
-            left: 10px;
+            top: 80px; /* Ajuste para exibir corretamente o ranking */
+            left: 10px; /* Alinhado à esquerda */
             background: rgba(255, 255, 255, 0.8);
             border: 2px solid black;
             padding: 10px;
-            display: none; /* Inicialmente escondido */
+            display: none;
             z-index: 2;
             white-space: pre-line;
             max-height: 300px; /* Limitar altura da caixa de ranking */
@@ -113,8 +113,8 @@
 
         #rankingButton {
             position: absolute;
-            top: 40px;
-            left: 0px;
+            top: 40px; /* Ajuste para o botão ficar abaixo do score */
+            left: 0px; /* Mover mais à esquerda */
             font-size: 24px;
             font-family: 'Gloock', serif;
             color: #b8860b;
@@ -122,7 +122,6 @@
             border: none;
             cursor: pointer;
             z-index: 2;
-            display: none; /* Inicialmente escondido */
         }
     </style>
 </head>
@@ -218,7 +217,6 @@
             rankingDisplayed = false;
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('rankingText').style.display = 'none';
-            document.getElementById('rankingButton').style.display = 'none'; // Esconder o botão ao reiniciar
             animate();
         }
 
@@ -231,7 +229,7 @@
 
             rankingText += `\nSua pontuação: ${score}`;
             document.getElementById('rankingText').innerText = rankingText;
-            document.getElementById('rankingText').style.display = 'block'; // Mostrar o ranking
+            document.getElementById('rankingText').style.display = 'block';
             rankingDisplayed = true;
         }
 
@@ -239,7 +237,7 @@
             if (!rankingDisplayed) {
                 displayRanking();
             } else {
-                document.getElementById('rankingText').style.display = 'none'; // Esconder o ranking
+                document.getElementById('rankingText').style.display = 'none';
                 rankingDisplayed = false;
             }
         }
@@ -271,7 +269,6 @@
             if (!gameStarted) {
                 gameStarted = true;
                 document.getElementById('touchToStart').style.display = 'none';
-                document.getElementById('rankingButton').style.display = 'block'; // Mostrar o botão de ranking ao iniciar o jogo
                 restartGame();
             } else if (gameOver) {
                 if (rankingDisplayed) {
