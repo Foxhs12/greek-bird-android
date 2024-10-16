@@ -8,8 +8,15 @@
         import { getFirestore, collection, getDocs, orderBy, query, limit, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            // Sua configuração do Firebase
+            apiKey: "AIzaSyDlaMVBRQlulpV9MbVxasuGblF38KkY5f8",
+            authDomain: "greek-bird.firebaseapp.com",
+            projectId: "greek-bird",
+            storageBucket: "greek-bird.appspot.com",
+            messagingSenderId: "58870766246",
+            appId: "1:58870766246:web:6eb9c796ec11abd0e5f267",
+            measurementId: "G-PZBLWMH5W6"
         };
+
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -114,14 +121,24 @@
         #rankingButton {
             position: absolute;
             top: 40px; /* Ajuste para o botão ficar abaixo do score */
-            left: 0px; /* Mover mais à esquerda */
+            left: 30px; /* Mover um pouco mais à direita */
             font-size: 24px;
             font-family: 'Gloock', serif;
             color: #b8860b;
-            background-color: transparent;
-            border: none;
+            background-color: #ffffff; /* Cor de fundo branca */
+            border: 2px solid #b8860b; /* Borda dourada */
+            padding: 10px 20px; /* Padding para dar mais espaço */
             cursor: pointer;
             z-index: 2;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar efeito de elevação */
+            border-radius: 5px; /* Cantos arredondados */
+            text-align: center; /* Centralizar o texto dentro do botão */
+        }
+
+        /* Efeito hover para o botão */
+        #rankingButton:hover {
+            background-color: #b8860b; /* Muda para dourado ao passar o mouse */
+            color: white; /* Texto branco ao passar o mouse */
         }
     </style>
 </head>
