@@ -7,6 +7,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getFirestore, collection, getDocs, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
+         const firebaseConfig = {
         const firebaseConfig = {
             apiKey: "AIzaSyDlaMVBRQlulpV9MbVxasuGblF38KkY5f8",
             authDomain: "greek-bird.firebaseapp.com",
@@ -72,7 +73,7 @@
             transform: translate(-50%, -50%);
             font-size: 48px;
             font-family: 'Gloock', serif;
-            color: #b8860b; /* Dourado escuro */
+            color: white;
             display: none;
             z-index: 2;
             white-space: nowrap;
@@ -85,7 +86,7 @@
             transform: translate(-50%, -50%);
             font-size: 36px;
             font-family: 'Gloock', serif;
-            color: #b8860b; /* Dourado escuro */
+            color: white;
             display: block;
             z-index: 2;
             white-space: nowrap;
@@ -140,6 +141,7 @@
         let score = 0;
         let gameOver = false;
         let gameStarted = false;
+        let rankingDisplayed = false;
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -186,6 +188,18 @@
             }
         }
 
+        function restartGame() {
+            bird.y = canvas.height / 2;
+            bird.velocity = 0;
+            columns.length = 0;
+            score = 0;
+            gameOver = false;
+            rankingDisplayed = false;
+            document.getElementById('gameOverText').style.display = 'none';
+            document.getElementById('rankingText').style.display = 'none';
+            animate();
+        }
+
         async function displayRanking() {
             const topScores = await getTopScores();
             let rankingText = "Top 10 Scores:\n";
@@ -196,6 +210,7 @@
             rankingText += `\nSua pontuação: ${score}`;
             document.getElementById('rankingText').innerText = rankingText;
             document.getElementById('rankingText').style.display = 'block';
+            rankingDisplayed = true;
         }
 
         function animate() {
@@ -216,32 +231,20 @@
             }
         }
 
-        function restartGame() {
-            bird.y = canvas.height / 2;
-            bird.velocity = 0;
-            columns.length = 0;
-            score = 0;
-            gameOver = false;
-            document.getElementById('gameOverText').style.display = 'none';
-            document.getElementById('rankingText').style.display = 'none'; // Esconder ranking quando o jogo reinicia
-            animate();
-        }
-
         canvas.addEventListener('click', (event) => {
             if (!gameStarted) {
                 gameStarted = true;
                 document.getElementById('touchToStart').style.display = 'none';
                 restartGame();
             } else if (gameOver) {
-                // Mantenha o ranking visível até que a tela seja tocada
-                document.getElementById('rankingText').style.display = 'block'; // Exibe o ranking
+                if (rankingDisplayed) {
+                    document.getElementById('rankingText').style.display = 'none';
+                }
+                restartGame();
             } else {
                 bird.velocity = bird.lift;
             }
         });
-
-        // Inicia a animação assim que a página carrega
-        animate();
     </script>
 </body>
 
