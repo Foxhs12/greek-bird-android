@@ -54,14 +54,15 @@
 
         #touchToStart {
             position: absolute;
-            top: 50%;
+            top: 30%; /* Mesma posição do game over */
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 36px;
+            font-size: 48px;
             font-family: 'Gloock', serif; /* Usar a fonte Gloock */
             color: white;
             display: block; /* Começa visível */
             z-index: 2;
+            white-space: nowrap; /* Manter em uma linha */
         }
 
         #rankingText {
