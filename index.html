@@ -105,8 +105,8 @@
 
         #rankingText {
             position: absolute;
-            top: 10%;
-            left: 10%;
+            top: 40px;
+            left: 10px;
             background: rgba(255, 255, 255, 0.8);
             border: 2px solid black;
             padding: 10px;
@@ -117,9 +117,8 @@
 
         #rankingButton {
             position: absolute;
-            top: 80%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 10px;
+            left: 10px;
             font-size: 24px;
             font-family: 'Gloock', serif;
             color: #b8860b; /* Dourado escuro */
@@ -137,7 +136,7 @@
     <div id="gameOverText">Game Over</div>
     <div id="touchToStart">Toque para começar</div>
     <div id="rankingText"></div>
-    <button id="rankingButton" onclick="displayRanking()">Ranking</button>
+    <button id="rankingButton" onclick="toggleRanking()">Ranking</button>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -153,8 +152,8 @@
         const bird = {
             x: 50,
             y: canvas.height / 2,
-            width: 70,
-            height: 70,
+            width: 80,
+            height: 80,
             gravity: 0.15,
             lift: -5,
             velocity: 0
@@ -198,7 +197,7 @@
                 }
             }
 
-            if (columns.length === 0 || columns[columns.length - 1].x < canvas.width - 330) { // Aumentado de 300px para 330px
+            if (columns.length === 0 || columns[columns.length - 1].x < canvas.width - 330) {
                 const gapY = Math.random() * (canvas.height - gapHeight - 100) + 50;
                 columns.push({ x: canvas.width, gapY });
             }
@@ -238,6 +237,15 @@
             rankingDisplayed = true;
         }
 
+        function toggleRanking() {
+            if (!rankingDisplayed) {
+                displayRanking();
+            } else {
+                document.getElementById('rankingText').style.display = 'none';
+                rankingDisplayed = false;
+            }
+        }
+
         async function saveAndDisplayRanking() {
             await saveScore("Jogador", score);  // Salvar o score no Firebase
             displayRanking();
@@ -261,7 +269,6 @@
             }
         }
 
-        canvas.add
         canvas.addEventListener('click', (event) => {
             if (!gameStarted) {
                 gameStarted = true;
