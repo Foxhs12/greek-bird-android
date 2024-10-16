@@ -74,31 +74,33 @@
         #gameOverText {
             position: absolute;
             top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            left: 10px; /* Alinhado à esquerda */
+            transform: translateY(-50%);
             font-size: 48px;
             font-family: 'Gloock', serif;
             color: #b8860b;
             display: none;
             z-index: 2;
+            white-space: nowrap; /* Para garantir que fique em uma linha */
         }
 
         #touchToStart {
             position: absolute;
             top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            left: 10px; /* Alinhado à esquerda */
+            transform: translateY(-50%);
             font-size: 36px;
             font-family: 'Gloock', serif;
             color: #b8860b;
             display: block;
             z-index: 2;
+            white-space: nowrap; /* Para garantir que fique em uma linha */
         }
 
         #rankingText {
             position: absolute;
             top: 50px; /* Ajuste para exibir corretamente o ranking */
-            left: 10px;
+            left: 10px; /* Alinhado à esquerda */
             background: rgba(255, 255, 255, 0.8);
             border: 2px solid black;
             padding: 10px;
@@ -110,7 +112,7 @@
         #rankingButton {
             position: absolute;
             top: 40px; /* Ajuste fino para o botão ficar abaixo do score */
-            left: 10px;
+            left: 10px; /* Alinhado à esquerda */
             font-size: 24px;
             font-family: 'Gloock', serif;
             color: #b8860b;
