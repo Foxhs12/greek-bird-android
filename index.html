@@ -3,7 +3,7 @@
 
 <head>
     <script type="module">
-        <!-- Firebase configuration já está aqui -->
+        <!-- Firebase configuration -->
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,28 +41,28 @@
 
         #gameOverText {
             position: absolute;
-            top: 30%; /* Posição mais alta */
+            top: 30%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 48px;
-            font-family: 'Gloock', serif; /* Aplicando a fonte Gloock */
+            font-family: 'Gloock', serif;
             color: white;
             display: none;
             z-index: 2;
-            white-space: nowrap; /* Para garantir que fique em uma linha */
+            white-space: nowrap;
         }
 
         #touchToStart {
             position: absolute;
-            top: 30%; /* Mesma posição do game over */
+            top: 30%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 48px;
-            font-family: 'Gloock', serif; /* Usar a fonte Gloock */
+            font-size: 36px; /* Tamanho da fonte diminuído */
+            font-family: 'Gloock', serif;
             color: white;
-            display: block; /* Começa visível */
+            display: block;
             z-index: 2;
-            white-space: nowrap; /* Manter em uma linha */
+            white-space: nowrap;
         }
 
         #rankingText {
@@ -75,6 +75,7 @@
             padding: 10px;
             display: none;
             z-index: 2;
+            white-space: pre-line; /* Para exibir o texto do ranking em múltiplas linhas */
         }
     </style>
 </head>
@@ -172,6 +173,20 @@
             animate();
         }
 
+        async function displayRanking() {
+            // Obter as melhores pontuações e exibir o ranking
+            const topScores = await getTopScores();
+            let rankingText = "Top 10 Scores:\n";
+            topScores.forEach((entry, index) => {
+                rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
+            });
+
+            rankingText += `\nSua pontuação: ${score}`;
+            document.getElementById('rankingText').innerText = rankingText;
+            document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
+            rankingDisplayed = true; // Marca que o ranking foi exibido
+        }
+
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             updateBird();
@@ -186,18 +201,7 @@
                 requestAnimationFrame(animate);
             } else {
                 document.getElementById('gameOverText').style.display = 'block';
-
-                getTopScores().then(topScores => {
-                    let rankingText = "Top 10 Scores:\n";
-                    topScores.forEach((entry, index) => {
-                        rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
-                    });
-
-                    rankingText += `\nSua pontuação: ${score}`;
-                    document.getElementById('rankingText').innerText = rankingText;
-                    document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
-                    rankingDisplayed = true; // Marca que o ranking foi exibido
-                });
+                displayRanking(); // Mostra o ranking ao final
             }
         }
 
