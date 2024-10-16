@@ -112,7 +112,7 @@
         #rankingButton {
             position: absolute;
             top: 40px; /* Ajuste fino para o botão ficar abaixo do score */
-            left: 50%; /* Centralizado horizontalmente */
+            left: calc(50% - 60px); /* Centralizado horizontalmente e ajustado para a esquerda */
             transform: translateX(-50%); /* Ajuste para ficar centralizado */
             font-size: 24px;
             font-family: 'Gloock', serif;
@@ -277,6 +277,8 @@
             } else {
                 bird.velocity = bird.lift;
             }
+        });
+   
         });
     </script>
 </body>
