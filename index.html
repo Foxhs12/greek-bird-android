@@ -5,7 +5,7 @@
     <script type="module">
         // Firebase configuration
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, orderBy, query, limit, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDlaMVBRQlulpV9MbVxasuGblF38KkY5f8",
@@ -29,6 +29,18 @@
                 topScores.push(doc.data());
             });
             return topScores;
+        }
+
+        async function saveScore(name, score) {
+            try {
+                await addDoc(collection(db, "scores"), {
+                    name: name,
+                    score: score
+                });
+                console.log("Score saved!");
+            } catch (error) {
+                console.error("Error saving score: ", error);
+            }
         }
     </script>
     <meta charset="UTF-8">
@@ -93,9 +105,8 @@
 
         #rankingText {
             position: absolute;
-            top: 70%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 10%;
+            left: 10%;
             background: rgba(255, 255, 255, 0.8);
             border: 2px solid black;
             padding: 10px;
@@ -142,8 +153,8 @@
         const bird = {
             x: 50,
             y: canvas.height / 2,
-            width: 80,
-            height: 80,
+            width: 70,
+            height: 70,
             gravity: 0.15,
             lift: -5,
             velocity: 0
@@ -227,6 +238,11 @@
             rankingDisplayed = true;
         }
 
+        async function saveAndDisplayRanking() {
+            await saveScore("Jogador", score);  // Salvar o score no Firebase
+            displayRanking();
+        }
+
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             updateBird();
@@ -241,10 +257,11 @@
                 requestAnimationFrame(animate);
             } else {
                 document.getElementById('gameOverText').style.display = 'block';
-                displayRanking();
+                saveAndDisplayRanking();
             }
         }
 
+        canvas.add
         canvas.addEventListener('click', (event) => {
             if (!gameStarted) {
                 gameStarted = true;
