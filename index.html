@@ -57,7 +57,7 @@
             top: 30%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 36px; /* Tamanho da fonte diminuído */
+            font-size: 36px;
             font-family: 'Gloock', serif;
             color: white;
             display: block;
@@ -75,7 +75,7 @@
             padding: 10px;
             display: none;
             z-index: 2;
-            white-space: pre-line; /* Para exibir o texto do ranking em múltiplas linhas */
+            white-space: pre-line;
         }
     </style>
 </head>
@@ -113,8 +113,8 @@
         const gapHeight = 250;
         let score = 0;
         let gameOver = false;
-        let gameStarted = false; // Controla se o jogo já começou
-        let rankingDisplayed = false; // Variável para controlar se o ranking foi exibido
+        let gameStarted = false;
+        let rankingDisplayed = false;
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -167,14 +167,13 @@
             columns.length = 0;
             score = 0;
             gameOver = false;
-            rankingDisplayed = false; // Reinicia a variável de ranking
+            rankingDisplayed = false;
             document.getElementById('gameOverText').style.display = 'none';
-            document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
+            document.getElementById('rankingText').style.display = 'none';
             animate();
         }
 
         async function displayRanking() {
-            // Obter as melhores pontuações e exibir o ranking
             const topScores = await getTopScores();
             let rankingText = "Top 10 Scores:\n";
             topScores.forEach((entry, index) => {
@@ -183,8 +182,8 @@
 
             rankingText += `\nSua pontuação: ${score}`;
             document.getElementById('rankingText').innerText = rankingText;
-            document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
-            rankingDisplayed = true; // Marca que o ranking foi exibido
+            document.getElementById('rankingText').style.display = 'block';
+            rankingDisplayed = true;
         }
 
         function animate() {
@@ -201,22 +200,22 @@
                 requestAnimationFrame(animate);
             } else {
                 document.getElementById('gameOverText').style.display = 'block';
-                displayRanking(); // Mostra o ranking ao final
+                displayRanking();
             }
         }
 
         canvas.addEventListener('click', (event) => {
             if (!gameStarted) {
                 gameStarted = true;
-                document.getElementById('touchToStart').style.display = 'none'; // Esconde a mensagem de "Toque para começar"
-                restartGame(); // Inicia o jogo
+                document.getElementById('touchToStart').style.display = 'none';
+                restartGame();
             } else if (gameOver) {
                 if (rankingDisplayed) {
-                    document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking ao clicar
+                    document.getElementById('rankingText').style.display = 'none';
                 }
-                restartGame(); // Reinicia o jogo
+                restartGame();
             } else {
-                bird.velocity = bird.lift; // O toque fará o pássaro saltar
+                bird.velocity = bird.lift;
             }
         });
     </script>
