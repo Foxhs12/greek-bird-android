@@ -140,7 +140,6 @@
         let score = 0;
         let gameOver = false;
         let gameStarted = false;
-        let rankingDisplayed = false;
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -197,7 +196,6 @@
             rankingText += `\nSua pontuação: ${score}`;
             document.getElementById('rankingText').innerText = rankingText;
             document.getElementById('rankingText').style.display = 'block';
-            rankingDisplayed = true;
         }
 
         function animate() {
@@ -224,9 +222,8 @@
             columns.length = 0;
             score = 0;
             gameOver = false;
-            rankingDisplayed = false;
             document.getElementById('gameOverText').style.display = 'none';
-            // Não esconder o ranking quando o jogo reinicia
+            document.getElementById('rankingText').style.display = 'none'; // Esconder ranking quando o jogo reinicia
             animate();
         }
 
@@ -237,13 +234,7 @@
                 restartGame();
             } else if (gameOver) {
                 // Mantenha o ranking visível até que a tela seja tocada
-                if (!rankingDisplayed) {
-                    displayRanking();
-                } else {
-                    document.getElementById('rankingText').style.display = 'none'; // Esconder ranking se já estiver visível
-                    restartGame();
-                }
-                document.getElementById('touchToStart').style.display = 'none';
+                document.getElementById('rankingText').style.display = 'block'; // Exibe o ranking
             } else {
                 bird.velocity = bird.lift;
             }
