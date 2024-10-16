@@ -3,58 +3,14 @@
 
 <head>
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
-        import { getFirestore, collection, addDoc, getDocs, orderBy, limit, query } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDlaMVBRQlulpV9MbVxasuGblF38KkY5f8",
-            authDomain: "greek-bird.firebaseapp.com",
-            projectId: "greek-bird",
-            storageBucket: "greek-bird.appspot.com",
-            messagingSenderId: "58870766246",
-            appId: "1:58870766246:web:6eb9c796ec11abd0e5f267",
-            measurementId: "G-PZBLWMH5W6"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        window.saveScore = async function saveScore(playerName, score) {
-            try {
-                const collectionScore = collection(db, "score");
-                await addDoc(collectionScore, {
-                    Player: playerName,
-                    Score: score
-                });
-            } catch (error) {
-                console.error("Erro ao salvar a pontuação: ", error);
-            }
-        }
-
-        window.getTopScores = async function getTopScores() {
-            const topScores = [];
-            try {
-                const collectionScore = collection(db, "score");
-                const snapshot = await getDocs(
-                    query(collectionScore, orderBy("Score", "desc"), limit(10))
-                );
-                snapshot.forEach((doc) => {
-                    topScores.push({
-                        name: doc.data().Player || "Anônimo",
-                        score: doc.data().Score
-                    });
-                });
-                return topScores;
-            } catch (error) {
-                console.error("Erro ao obter as pontuações: ", error);
-                return [];
-            }
-        }
+        <!-- Firebase configuration já está aqui -->
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greek Bird</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gloock&display=swap');
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -85,7 +41,7 @@
 
         #gameOverText {
             position: absolute;
-            top: 50%;
+            top: 30%; /* Subir o letreiro mais para cima */
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 48px;
@@ -94,14 +50,15 @@
             z-index: 2;
         }
 
-        #tryAgainButton {
+        #touchToStart {
             position: absolute;
-            top: 60%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            padding: 10px 20px;
-            font-size: 24px;
-            display: none;
+            font-size: 36px;
+            font-family: 'Gloock', serif; /* Usar a fonte Gloock */
+            color: white;
+            display: block; /* Começa visível */
             z-index: 2;
         }
 
@@ -114,7 +71,6 @@
             border: 2px solid black;
             padding: 10px;
             display: none;
-            /* Começa invisível */
             z-index: 2;
         }
     </style>
@@ -124,7 +80,7 @@
     <div id="background"></div>
     <canvas id="gameCanvas"></canvas>
     <div id="gameOverText">Game Over</div>
-    <button id="tryAgainButton" onclick="restartGame()">Try Again</button>
+    <div id="touchToStart">Toque para começar</div>
     <div id="rankingText"></div>
 
     <script>
@@ -143,8 +99,8 @@
             y: canvas.height / 2,
             width: 80,
             height: 80,
-            gravity: 0.15, // Gravidade reduzida para uma queda mais suave
-            lift: -5,  // Elevação ajustada para saltos mais suaves
+            gravity: 0.15,
+            lift: -5,
             velocity: 0
         };
 
@@ -194,7 +150,6 @@
 
         function updateBird() {
             bird.velocity += bird.gravity;
-          //  bird.velocity *= 0.5; // Suavização da velocidade
             bird.y += bird.velocity;
 
             if (bird.y + bird.height > canvas.height || bird.y < 0) {
@@ -210,7 +165,6 @@
             gameOver = false;
             rankingDisplayed = false; // Reinicia a variável de ranking
             document.getElementById('gameOverText').style.display = 'none';
-            document.getElementById('tryAgainButton').style.display = 'none';
             document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
             animate();
         }
@@ -229,44 +183,31 @@
                 requestAnimationFrame(animate);
             } else {
                 document.getElementById('gameOverText').style.display = 'block';
-                document.getElementById('tryAgainButton').style.display = 'block';
 
-                // Obter as melhores pontuações e verificar se a pontuação do jogador é suficiente
                 getTopScores().then(topScores => {
-                    let lowestScore = topScores.length > 0 ? topScores[topScores.length - 1].score : 0;
-
-                    if (score > lowestScore) {
-                        // Solicitar o nome do jogador
-                        const playerName = prompt("Digite seu nome para o ranking:");
-                        if (playerName) {
-                            saveScore(playerName, score);
-                        }
-                    }
-
                     let rankingText = "Top 10 Scores:\n";
                     topScores.forEach((entry, index) => {
                         rankingText += `${index + 1}. ${entry.name}: ${entry.score}\n`;
                     });
 
-                    // Adiciona a pontuação do jogador ao ranking
-                    rankingText += `\nSua pontuação: ${score} ${topScores.length < 10 || topScores.some(entry => entry.score < score) ? "entrou" : "não entrou"} no ranking.`;
+                    rankingText += `\nSua pontuação: ${score}`;
                     document.getElementById('rankingText').innerText = rankingText;
-                    document.getElementById('rankingText').style.display = 'block'; // Mostra o ranking
+                    document.getElementById('rankingText').style.display = 'block';
                     rankingDisplayed = true; // Marca que o ranking foi exibido
                 });
             }
         }
 
-        canvas.addEventListener('click', async (event) => {
+        canvas.addEventListener('click', (event) => {
             if (!gameStarted) {
-                gameStarted = true; // O jogo começa no primeiro toque
+                gameStarted = true;
+                document.getElementById('touchToStart').style.display = 'none'; // Esconde a mensagem de "Toque para começar"
                 restartGame(); // Inicia o jogo
             } else if (gameOver) {
-                // Se o jogo acabou e o ranking foi exibido, ao clicar, esconde o ranking
                 if (rankingDisplayed) {
-                    document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking
+                    document.getElementById('rankingText').style.display = 'none'; // Esconde o ranking ao clicar
                 }
-                restartGame(); // Reinicia o jogo ao clicar após Game Over
+                restartGame(); // Reinicia o jogo
             } else {
                 bird.velocity = bird.lift; // O toque fará o pássaro saltar
             }
