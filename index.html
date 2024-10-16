@@ -102,6 +102,8 @@
             display: none;
             z-index: 2;
             white-space: pre-line;
+            font-size: 20px;
+            font-family: 'Gloock', serif;
         }
     </style>
 </head>
@@ -140,7 +142,6 @@
         let score = 0;
         let gameOver = false;
         let gameStarted = false;
-        let rankingDisplayed = false;
 
         function drawBird() {
             ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
@@ -193,7 +194,6 @@
             columns.length = 0;
             score = 0;
             gameOver = false;
-            rankingDisplayed = false;
             document.getElementById('gameOverText').style.display = 'none';
             document.getElementById('rankingText').style.display = 'none';
             animate();
@@ -209,7 +209,6 @@
             rankingText += `\nSua pontuação: ${score}`;
             document.getElementById('rankingText').innerText = rankingText;
             document.getElementById('rankingText').style.display = 'block';
-            rankingDisplayed = true;
         }
 
         function animate() {
@@ -236,9 +235,6 @@
                 document.getElementById('touchToStart').style.display = 'none';
                 restartGame();
             } else if (gameOver) {
-                if (rankingDisplayed) {
-                    document.getElementById('rankingText').style.display = 'none';
-                }
                 restartGame();
             } else {
                 bird.velocity = bird.lift;
