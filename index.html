@@ -99,7 +99,7 @@
 
         #rankingText {
             position: absolute;
-            top: 50px; /* Ajuste para exibir corretamente o ranking */
+            top: 80px; /* Ajuste para exibir corretamente o ranking */
             left: 10px; /* Alinhado à esquerda */
             background: rgba(255, 255, 255, 0.8);
             border: 2px solid black;
@@ -107,13 +107,14 @@
             display: none;
             z-index: 2;
             white-space: pre-line;
+            max-height: 300px; /* Limitar altura da caixa de ranking */
+            overflow-y: auto; /* Adicionar rolagem se necessário */
         }
 
         #rankingButton {
             position: absolute;
-            top: 40px; /* Ajuste fino para o botão ficar abaixo do score */
-            left: 50%; /* Centralizado horizontalmente */
-            transform: translateX(-50%); /* Ajuste para ficar centralizado */
+            top: 40px; /* Ajuste para o botão ficar abaixo do score */
+            left: 10px; /* Mover mais à esquerda */
             font-size: 24px;
             font-family: 'Gloock', serif;
             color: #b8860b;
