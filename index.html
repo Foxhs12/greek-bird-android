@@ -113,7 +113,8 @@
             background: rgba(255, 255, 255, 0.8);
             border: 2px solid black;
             padding: 10px;
-            display: none; /* Começa invisível */
+            display: none;
+            /* Começa invisível */
             z-index: 2;
         }
     </style>
@@ -142,8 +143,8 @@
             y: canvas.height / 2,
             width: 80,
             height: 80,
-            gravity: 0.2, // Aumentei a gravidade para cair mais rápido
-            lift: -4, // Reduzi a elevação para saltar menos alto
+            gravity: 0.1, // Gravidade reduzida para uma queda mais suave
+            lift: -3.5,  // Elevação ajustada para saltos mais suaves
             velocity: 0
         };
 
@@ -193,6 +194,7 @@
 
         function updateBird() {
             bird.velocity += bird.gravity;
+            bird.velocity *= 0.9; // Suavização da velocidade
             bird.y += bird.velocity;
 
             if (bird.y + bird.height > canvas.height || bird.y < 0) {
