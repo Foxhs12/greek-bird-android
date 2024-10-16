@@ -8,15 +8,8 @@
         import { getFirestore, collection, getDocs, orderBy, query, limit, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyDlaMVBRQlulpV9MbVxasuGblF38KkY5f8",
-            authDomain: "greek-bird.firebaseapp.com",
-            projectId: "greek-bird",
-            storageBucket: "greek-bird.appspot.com",
-            messagingSenderId: "58870766246",
-            appId: "1:58870766246:web:6eb9c796ec11abd0e5f267",
-            measurementId: "G-PZBLWMH5W6"
+            // Sua configuração do Firebase
         };
-
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -121,13 +114,13 @@
         #rankingButton {
             position: absolute;
             top: 100px; /* Ajuste a altura do botão conforme necessário */
-            left: 20px; /* Posição mais à direita */
-            font-size: 24px;
+            left: 5px; /* Mais à esquerda */
+            font-size: 20px; /* Diminuir o tamanho da fonte */
             font-family: 'Gloock', serif;
             color: #b8860b;
             background-color: #ffffff;
             border: 2px solid #b8860b;
-            padding: 10px 20px;
+            padding: 5px 10px; /* Diminuir o padding para tornar o botão menor */
             cursor: pointer;
             z-index: 2;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
